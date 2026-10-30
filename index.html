@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Viaje al Mictlán · Día de Muertos</title>
+<meta name="description" content="Escape room de español sobre el Día de Muertos: cinco puertas, una palabra secreta. Niveles A1 y A2–B1. @eduproberegova">
+<meta name="theme-color" content="#C8203F">
+<meta property="og:title" content="Viaje al Mictlán · Día de Muertos">
+<meta property="og:description" content="Escape room de español: abre las cinco puertas del Mictlán. Niveles A1 y A2–B1.">
+<meta property="og:image" content="og-image.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#C8203F; --red-d:#A3172F; --blue:#B3D1ED; --blue-l:#DCEAF7; --bg:#F3F7FB;
+  --ink:#1F2433; --muted:#5B6478; --card:#FFFFFF; --line:#D5E2F0;
+  --marigold:#F5A300; --orange:#E8730C; --purple:#6F48A8; --magenta:#D6336C; --teal:#1F8A82;
+  --ok:#1E8E5A; --ok-bg:#E3F5EC; --warn:#B86E00; --warn-bg:#FFF2D9; --bad:#C8203F; --bad-bg:#FBE4E8;
+  --r:16px; --shadow:0 2px 0 rgba(31,36,51,.06), 0 8px 24px rgba(31,36,51,.07);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;font-size:18px;line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(2rem,7vw,3.2rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.4rem,4.5vw,1.9rem);font-weight:800}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0 0 .8em}
+button{font:inherit;cursor:pointer}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+
+/* papel picado */
+.picado{display:block;width:100%;height:64px}
+.top{position:sticky;top:0;z-index:20;background:var(--bg)}
+.bar{max-width:820px;margin:0 auto;padding:6px 16px 8px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.brand{font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--red);font-weight:700;letter-spacing:.02em;white-space:nowrap}
+.doors{display:flex;gap:6px}
+.door-dot{width:30px;height:36px;border-radius:15px 15px 4px 4px;border:2px solid var(--line);background:#fff;display:grid;place-items:center;font-family:"JetBrains Mono",monospace;font-weight:700;font-size:.85rem;color:var(--muted)}
+.door-dot.open{background:var(--marigold);border-color:var(--orange);color:#fff}
+.door-dot.now{border-color:var(--red);box-shadow:0 0 0 3px rgba(200,32,63,.15)}
+.clock{font-family:"JetBrains Mono",monospace;font-size:.9rem;color:var(--muted);white-space:nowrap}
+.hidden{display:none!important}
+
+main{max-width:820px;margin:0 auto;padding:8px 16px 140px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:22px;margin:0 0 18px}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--red);font-weight:700;margin-bottom:6px}
+
+/* hero */
+.hero{border-radius:22px;overflow:hidden;position:relative;margin:0 0 18px;box-shadow:var(--shadow);background:#2B1B3F}
+.hero .pic{aspect-ratio:16/9;border-radius:0}
+.hero .pic .fb{font-size:4.5rem;background:radial-gradient(circle at 30% 30%,#F5A300 0,#E8730C 25%,#6F48A8 70%,#2B1B3F 100%)}
+
+/* pictures with fallback */
+.pic{position:relative;width:100%;aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:var(--blue-l)}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.pic .fb{position:absolute;inset:0;display:grid;place-items:center;font-size:3rem;background:linear-gradient(135deg,var(--blue-l),#fff 60%,#FFE7B8)}
+
+/* xolo speech */
+.xolo{display:flex;gap:14px;align-items:flex-start}
+.xolo .ava{flex:0 0 72px;width:72px;height:72px;border-radius:50%;aspect-ratio:1/1;border:3px solid var(--marigold)}
+.xolo .ava .fb{font-size:2.2rem}
+.bubble{background:var(--blue-l);border-radius:4px 16px 16px 16px;padding:12px 16px;flex:1}
+.bubble b{color:var(--red)}
+
+/* level choice */
+.levels{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 4px}
+.lvl{border:2px solid var(--line);background:#fff;border-radius:14px;padding:14px;text-align:left;transition:.15s}
+.lvl strong{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:1.35rem}
+.lvl span{font-size:.92rem;color:var(--muted)}
+.lvl.sel{border-color:var(--red);background:#FFF5F7;box-shadow:0 0 0 3px rgba(200,32,63,.12)}
+label.f{display:block;font-weight:600;margin:14px 0 6px}
+input.txt{width:100%;font:inherit;font-size:1.05rem;padding:12px 14px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);outline:none}
+input.txt:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(179,209,237,.6)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:13px 24px;font-weight:700;font-size:1.02rem;background:var(--red);color:#fff;box-shadow:0 3px 0 var(--red-d);transition:transform .08s}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--red-d)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.btn.gold{background:var(--marigold);box-shadow:0 3px 0 var(--orange);color:#2B1B00}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+.small{font-size:.9rem;color:var(--muted)}
+.fb-line{margin-top:12px;font-weight:600;min-height:1.4em}
+.fb-line.ok{color:var(--ok)} .fb-line.bad{color:var(--bad)} .fb-line.warn{color:var(--warn)}
+.hintbox{margin-top:12px;background:var(--warn-bg);border-left:4px solid var(--marigold);padding:10px 14px;border-radius:8px;font-size:.98rem}
+
+/* reading */
+details.reading{background:#FFFBF2;border:1px solid #F3DDB0;border-radius:14px;padding:4px 18px;margin:0 0 16px}
+details.reading summary{cursor:pointer;font-weight:700;padding:10px 0;color:var(--orange)}
+details.reading .rtext p{margin:0 0 .75em}
+.reading .rimg{max-width:420px;margin:4px auto 14px}
+.reading .rimg .pic{aspect-ratio:4/3}
+.tri{display:grid;gap:12px;margin-bottom:8px}
+.tri h3{color:var(--purple);margin-bottom:.25em}
+
+/* choice */
+.items{display:grid;gap:12px}
+.item{border:2px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff;transition:border-color .15s}
+.item .q{font-weight:600;margin-bottom:8px}
+.item .num{font-family:"JetBrains Mono",monospace;color:var(--muted);font-size:.85rem;margin-right:6px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:2px solid var(--line);background:var(--bg);border-radius:999px;padding:7px 14px;font-weight:600;font-size:.95rem;color:var(--ink)}
+.opt.sel{background:var(--blue);border-color:#7FAFD9}
+.item.ok{border-color:var(--ok);background:var(--ok-bg)}
+.item.ok .opt.sel{background:var(--ok);border-color:var(--ok);color:#fff}
+.item.bad{border-color:var(--bad);background:var(--bad-bg)}
+.item.warn{border-color:var(--marigold);background:var(--warn-bg)}
+.item.ok .opt{pointer-events:none}
+
+/* flip cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.flip{perspective:900px;border:0;background:none;padding:0;text-align:left}
+.flip .in{position:relative;transition:transform .45s;transform-style:preserve-3d;min-height:220px}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;background:#fff;box-shadow:var(--shadow);padding:10px;display:flex;flex-direction:column}
+.flip .face .pic{aspect-ratio:1/1;flex:0 0 auto}
+.flip .face .w{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:1.02rem;margin-top:8px;text-align:center}
+.flip .back{transform:rotateY(180deg);background:var(--blue-l);justify-content:center}
+.flip .back .w{color:var(--red);margin:0 0 6px}
+.flip .back p{font-size:.95rem;margin:0;text-align:center}
+.flip.seen .front{outline:3px solid var(--marigold);outline-offset:-3px}
+
+/* typed */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.titem{border:2px solid var(--line);border-radius:14px;padding:12px;background:#fff}
+.titem .pic{aspect-ratio:16/10;max-height:170px;margin-bottom:8px}
+.titem .clue{font-size:.98rem;margin-bottom:8px}
+.titem .pat{font-family:"JetBrains Mono",monospace;font-size:.85rem;color:var(--muted);margin-bottom:6px;letter-spacing:.04em}
+.ans{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ans .art{font-weight:700;color:var(--muted)}
+.ans input{flex:1;min-width:120px}
+.titem.ok{border-color:var(--ok);background:var(--ok-bg)}
+.titem.bad{border-color:var(--bad);background:var(--bad-bg)}
+.titem.warn{border-color:var(--marigold);background:var(--warn-bg)}
+.note{font-size:.85rem;font-weight:600;margin-top:6px}
+.note.warn{color:var(--warn)} .note.bad{color:var(--bad)}
+
+/* gaps */
+.gaptext{line-height:2.4;font-size:1.06rem}
+.gap{display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap}
+.gap input{font:inherit;font-size:1rem;padding:4px 8px;border:2px solid var(--line);border-bottom-width:3px;border-radius:8px;background:#fff;color:var(--ink);outline:none;width:9ch;text-align:center}
+.gap input:focus{border-color:#7FAFD9}
+.gap .inf{color:var(--purple);font-style:italic;font-size:.95rem}
+.gap.ok input{border-color:var(--ok);background:var(--ok-bg);color:var(--ok);font-weight:700}
+.gap.bad input{border-color:var(--bad);background:var(--bad-bg)}
+.gap.warn input{border-color:var(--marigold);background:var(--warn-bg)}
+.gap .n{font-family:"JetBrains Mono",monospace;font-size:.7rem;color:var(--muted);vertical-align:super}
+
+/* order */
+.seq,.pool{display:grid;gap:8px}
+.seq{min-height:60px;border:2px dashed var(--line);border-radius:14px;padding:10px;margin-bottom:12px;background:#fff}
+.seq:empty::before{content:"Toca las frases en el orden correcto…";color:var(--muted);font-style:italic}
+.chip{border:2px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;text-align:left;font-size:1rem;display:flex;gap:10px;align-items:flex-start;color:var(--ink)}
+.chip .k{font-family:"JetBrains Mono",monospace;font-weight:700;color:var(--red);min-width:1.4em}
+.pool .chip{background:var(--bg)}
+.chip.ok{border-color:var(--ok);background:var(--ok-bg);pointer-events:none}
+.chip.flash{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* door transitions */
+.unlock{text-align:center}
+.bigletter{display:inline-grid;place-items:center;width:110px;height:130px;border-radius:55px 55px 12px 12px;background:var(--marigold);color:#fff;font-family:"Bricolage Grotesque",sans-serif;font-size:4.2rem;font-weight:800;box-shadow:0 6px 0 var(--orange);margin:6px 0 16px;animation:pop .5s ease-out}
+@keyframes pop{0%{transform:scale(.3) rotate(-12deg);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1)}}
+.letters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:8px 0 16px}
+.letters span{width:52px;height:60px;border-radius:26px 26px 8px 8px;background:var(--marigold);color:#fff;display:grid;place-items:center;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.8rem;box-shadow:0 4px 0 var(--orange)}
+
+/* certificate */
+.cert{border:3px solid var(--marigold);border-radius:20px;padding:26px 20px;text-align:center;background:linear-gradient(180deg,#FFF8E8,#fff 50%)}
+.cert .who{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.8rem;color:var(--red);margin:6px 0}
+.stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px}
+.stat b{display:block;font-family:"JetBrains Mono",monospace;font-size:1.2rem}
+.speak{display:grid;gap:12px}
+.speak .sq{background:#fff;border-left:5px solid var(--purple);border-radius:10px;padding:12px 14px}
+.speak .sq b{display:block;margin-bottom:4px}
+.speak .sq span{color:var(--muted);font-size:.95rem}
+.poem{font-family:"Bricolage Grotesque",sans-serif;font-size:1.15rem;background:var(--blue-l);border-radius:14px;padding:16px 20px;line-height:1.6;margin:10px 0}
+
+/* accent bar */
+.accents{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:flex;gap:6px;justify-content:center;flex-wrap:wrap;box-shadow:0 -4px 16px rgba(31,36,51,.08)}
+.accents button{min-width:42px;height:44px;border-radius:10px;border:2px solid var(--line);background:var(--bg);font-size:1.15rem;font-weight:700;color:var(--ink);-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.accents button:active{background:var(--blue)}
+footer{text-align:center;font-size:.8rem;color:var(--muted);padding:10px 16px 30px}
+@media (max-width:520px){
+  body{font-size:17px}
+  .card{padding:18px 16px}
+  .levels{grid-template-columns:1fr}
+  .bar{gap:8px}
+  .brand{display:none}
+  .door-dot{width:26px;height:32px;font-size:.78rem}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .flip .in{min-height:210px}
+  .xolo .ava{flex-basis:56px;width:56px;height:56px}
+  .accents{gap:4px;padding-left:6px;padding-right:6px}
+  .accents button{min-width:34px;height:42px;padding:0;font-size:1.05rem}
+  .gaptext{line-height:2.2}
+  .gap input{padding:2px 6px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <svg class="picado" id="picado" viewBox="0 0 1200 64" preserveAspectRatio="none" aria-hidden="true"></svg>
+  <div class="bar">
+    <span class="brand">@eduproberegova</span>
+    <div class="doors" id="doors"></div>
+    <span class="clock" id="clock">00:00</span>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<div class="accents hidden" id="accents" aria-label="Letras especiales"></div>
+<footer>© @eduproberegova · Viaje al Mictlán · Día de Muertos</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+"use strict";
+
+/* ============================================================
+   CONTENIDO
+   ============================================================ */
+var LETTERS = ['S','A','M','L','A'];  // se ordenan al final: ALMAS
+
+var SYMB_A1 = [
+  {img:'vela.jpg', emoji:'🕯️', art:'la', main:'vela', alts:['velas','veladora','veladoras'], back:'La vela da luz a las almas.'},
+  {img:'cempasuchil.jpg', emoji:'🌼', art:'el', main:'cempasúchil', alts:['cempaxóchitl','cempasúchitl','cempoalxóchitl','flor de cempasúchil'], back:'Es una flor naranja. Es la flor del Día de Muertos.'},
+  {img:'calavera.jpg', emoji:'💀', art:'la', main:'calavera de azúcar', alts:['calavera','calaverita','calaverita de azúcar'], back:'Es un dulce de azúcar. Es blanco y de colores.'},
+  {img:'pan.jpg', emoji:'🍞', art:'el', main:'pan de muerto', alts:['pan de muertos'], back:'Es un pan dulce. En México se come en noviembre.'},
+  {img:'papel-picado.jpg', emoji:'🎊', art:'el', main:'papel picado', alts:[], back:'Es un papel de muchos colores con dibujos.'},
+  {img:'foto.jpg', emoji:'🖼️', art:'la', main:'foto', alts:['fotos','fotografía','fotografías'], back:'En la foto hay una persona de la familia.'},
+  {img:'agua.jpg', emoji:'💧', art:'el', main:'agua', alts:[], back:'Las almas tienen sed: ¡necesitan agua!'},
+  {img:'catrina.jpg', emoji:'👒', art:'la', main:'Catrina', alts:[], back:'Es una calavera elegante con un sombrero grande.'}
+];
+var SYMB_B1 = [
+  {img:'vela.jpg', emoji:'🕯️', art:'la', main:'veladora', alts:['veladoras','vela','velas'], back:'Su luz guía a las almas en el camino de vuelta.'},
+  {img:'cempasuchil.jpg', emoji:'🌼', art:'el', main:'cempasúchil', alts:['cempaxóchitl','cempasúchitl','cempoalxóchitl','flor de cempasúchil'], back:'Con sus pétalos naranjas se hace un camino hasta la ofrenda.'},
+  {img:'agua.jpg', emoji:'💧', art:'el', main:'agua', alts:[], back:'Las almas llegan con sed después del largo viaje.'},
+  {img:'sal.jpg', emoji:'🧂', art:'la', main:'sal', alts:[], back:'Sirve para purificar a las almas.'},
+  {img:'pan.jpg', emoji:'🍞', art:'el', main:'pan de muerto', alts:['pan de muertos'], back:'Es un pan dulce; su decoración recuerda los huesos.'},
+  {img:'papel-picado.jpg', emoji:'🎊', art:'el', main:'papel picado', alts:[], back:'Representa el viento y la fragilidad de la vida.'},
+  {img:'calavera.jpg', emoji:'💀', art:'la', main:'calavera de azúcar', alts:['calavera','calaverita','calaverita de azúcar','calaveras de azúcar'], back:'Es un dulce que a menudo lleva un nombre escrito en la frente.'},
+  {img:'copal.jpg', emoji:'🌫️', art:'el', main:'copal', alts:[], back:'Es una resina; su humo limpia el lugar.'},
+  {img:'foto.jpg', emoji:'🖼️', art:'la', main:'foto', alts:['fotos','fotografía','fotografías'], back:'Muestra a la persona a la que se dedica la ofrenda.'}
+];
+
+var LEVELS = {
+a1: {
+  label:'A1',
+  intro:'¡Hola! Me llamo <b>Xolo</b>. Soy un perro xoloitzcuintle y vivo en el <b>Mictlán</b>, el mundo de los muertos de los antiguos mexicas. Es la noche del 1 de noviembre: las almas visitan a sus familias, pero el camino está oscuro. ¿Me ayudas? Hay <b>cinco puertas</b>. Detrás de cada puerta hay una letra. Con las cinco letras formas la <b>palabra secreta</b>.',
+  doors: [
+  { title:'¿Halloween o Día de Muertos?',
+    xolo:'Primera puerta. Muchas personas creen que el Día de Muertos es el Halloween mexicano. ¡No es verdad! ¿Conoces las diferencias?',
+    parts:[
+      {type:'choice', instr:'Lee las frases. ¿Es Halloween, el Día de Muertos o los dos?',
+       options:['Halloween','Día de Muertos','Los dos'],
+       items:[
+        {q:'La fiesta es el 31 de octubre.', a:0},
+        {q:'La fiesta es el 1 y el 2 de noviembre.', a:1},
+        {q:'Hay calabazas con caras.', a:0},
+        {q:'Los niños dicen: «¿Truco o trato?».', a:0},
+        {q:'Hay una ofrenda con fotos, comida y velas.', a:1},
+        {q:'Las familias recuerdan a sus muertos con alegría.', a:1},
+        {q:'Hay calaveras y esqueletos.', a:2},
+        {q:'Muchas personas se pintan la cara.', a:2}
+       ],
+       hint:'Halloween: 31 de octubre, calabazas, «¿truco o trato?». Día de Muertos: 1 y 2 de noviembre, familia, ofrenda. Calaveras y caras pintadas hay en las dos fiestas.'}
+    ]},
+  { title:'Los símbolos de la ofrenda',
+    xolo:'Segunda puerta: la ofrenda. En la ofrenda hay cosas muy especiales. Primero mira las tarjetas. Después escribe las palabras.',
+    parts:[
+      {type:'cards', instr:'Toca cada tarjeta para darle la vuelta. Lee y recuerda las palabras.', cards:SYMB_A1},
+      {type:'type', instr:'Escribe la palabra. Cada _ es una letra.', items:SYMB_A1, showPat:true, showClue:true, showImg:true,
+       hint:'Las palabras son: agua, Catrina, papel picado, vela, foto, pan de muerto, cempasúchil, calavera de azúcar (en otro orden).'}
+    ]},
+  { title:'La leyenda del cempasúchil',
+    xolo:'Tercera puerta. ¿Por qué el cempasúchil es la flor del Día de Muertos? Lee la leyenda.',
+    reading:{title:'La leyenda del cempasúchil', img:'leyenda.jpg', emoji:'🌼', html:
+      '<p>Xóchitl y Huitzilin son dos jóvenes mexicas. Son novios y están muy enamorados. Todas las tardes suben a una montaña y llevan flores para Tonatiuh, el dios del Sol. Allí prometen estar juntos para siempre.</p>'+
+      '<p>Un día hay una guerra. Huitzilin va a la guerra y muere. Xóchitl está muy triste. Sube a la montaña y habla con el dios del Sol: «Por favor, quiero estar con Huitzilin».</p>'+
+      '<p>El dios del Sol escucha a Xóchitl. Toca a la chica con un rayo de sol y Xóchitl se convierte en una flor de color naranja, como el sol. Entonces llega un colibrí: ¡es Huitzilin! El colibrí toca la flor y la flor se abre.</p>'+
+      '<p>Por eso el cempasúchil tiene el color del sol y es la flor del Día de Muertos. Su nombre en náhuatl significa «veinte flores».</p>'},
+    parts:[
+      {type:'order', instr:'Ordena la historia. Toca las frases en el orden correcto.',
+       items:['Xóchitl y Huitzilin llevan flores al dios del Sol.','Huitzilin va a la guerra y muere.','Xóchitl habla con el dios del Sol.','Xóchitl se convierte en una flor.','Un colibrí toca la flor y la flor se abre.'],
+       hint:'La historia empieza en la montaña, con flores para el Sol, y termina con un pájaro.'},
+      {type:'choice', instr:'¿Verdadero o falso?', options:['Verdadero','Falso'],
+       items:[
+        {q:'Xóchitl y Huitzilin son hermanos.', a:1},
+        {q:'Llevan flores para el dios del Sol.', a:0},
+        {q:'Xóchitl está muy contenta porque Huitzilin va a la guerra.', a:1},
+        {q:'Xóchitl se convierte en una flor naranja.', a:0},
+        {q:'Huitzilin vuelve como un perro.', a:1},
+        {q:'«Cempasúchil» significa «veinte flores».', a:0}
+       ],
+       hint:'Lee otra vez el segundo y el tercer párrafo. ¿Qué animal llega al final?'}
+    ]},
+  { title:'Mi ofrenda',
+    xolo:'Cuarta puerta. Ahora preparamos una ofrenda. ¿Qué hay en la ofrenda? ¿Dónde están las cosas?',
+    parts:[
+      {type:'choice', instr:'¿Hay, está o están?', options:['hay','está','están'],
+       items:[
+        {q:'En la ofrenda ___ muchas velas.', a:0},
+        {q:'La foto de la abuela ___ en el centro.', a:1},
+        {q:'En la mesa ___ un pan de muerto.', a:0},
+        {q:'Las flores ___ en el suelo.', a:2},
+        {q:'¿Dónde ___ las calaveras de azúcar?', a:2},
+        {q:'En el papel picado ___ dibujos de calaveras.', a:0},
+        {q:'El agua ___ al lado de la foto.', a:1},
+        {q:'¿___ agua en la ofrenda?', a:0}
+       ],
+       hint:'hay + un / una / muchos / números / sin artículo. está / están + el, la, los, las (cosas concretas).'},
+      {type:'gaps', instr:'Escribe el adjetivo en la forma correcta.',
+       html:'<p>1. Las flores son muy [[0]].</p><p>2. La calavera de azúcar es [[1]].</p><p>3. Los panes de muerto son [[2]].</p><p>4. La Catrina es una calavera muy [[3]].</p><p>5. Las velas son [[4]].</p><p>6. Los perros xoloitzcuintles son [[5]].</p>',
+       gaps:[{inf:'bonito',a:['bonitas']},{inf:'blanco',a:['blanca']},{inf:'dulce',a:['dulces']},{inf:'elegante',a:['elegante']},{inf:'pequeño',a:['pequeñas']},{inf:'negro',a:['negros']}],
+       hint:'¿Masculino o femenino? ¿Singular o plural? Mira el sustantivo. «Elegante» y «dulce» no cambian en femenino.'}
+    ]},
+  { title:'Tres tradiciones',
+    xolo:'Última puerta. En Ucrania también hay días y noches para recordar a los muertos. Lee sobre tres tradiciones.',
+    reading:{title:'Tres tradiciones', tri:[
+      {h:'El Día de Muertos (México)', img:'ofrenda.jpg', emoji:'🌼', p:'Es el 1 y el 2 de noviembre. Las familias hacen una ofrenda con fotos, flores, comida y velas. Creen que las almas vuelven a casa.'},
+      {h:'Zadushky · Задушки (Ucrania)', img:'zadushky.jpg', emoji:'🕯️', p:'Es el 1 y el 2 de noviembre, sobre todo en el oeste de Ucrania. Las familias van al cementerio, ponen flores y velas y recuerdan a sus muertos. Es una tradición cristiana.'},
+      {h:'La Noche de Veles · Велесова ніч (Ucrania)', img:'veles.jpg', emoji:'🌙', p:'Es la noche del 31 de octubre. Dicen que los espíritus de los antepasados visitan a sus familias. La gente pone una vela en la ventana y comida para las almas. Pero muchos historiadores dicen que es una tradición moderna, no antigua.'}
+    ]},
+    parts:[
+      {type:'choice', instr:'Según los textos, ¿de qué fiesta hablan las frases?', options:['Día de Muertos','Zadushky','Noche de Veles'],
+       items:[
+        {q:'Es una fiesta de México.', a:0},
+        {q:'Es el 31 de octubre.', a:2},
+        {q:'Es una tradición cristiana del oeste de Ucrania.', a:1},
+        {q:'La gente pone una vela en la ventana.', a:2},
+        {q:'Las familias hacen una ofrenda en casa.', a:0},
+        {q:'Muchos historiadores dicen que es una tradición moderna.', a:2}
+       ],
+       hint:'Noche de Veles = 31 de octubre, ventana, historiadores. Zadushky = cementerio, oeste de Ucrania. Día de Muertos = México, ofrenda.'},
+      {type:'choice', instr:'Elige la respuesta correcta.',
+       items:[
+        {q:'¿Qué hay en las tres fiestas?', opts:['velas','calabazas','disfraces'], a:0},
+        {q:'¿Qué fiestas son el 1 y el 2 de noviembre?', opts:['el Día de Muertos y Zadushky','Zadushky y la Noche de Veles','solo la Noche de Veles'], a:0},
+        {q:'¿Qué tienen en común las tres fiestas?', opts:['Recuerdan a los muertos de la familia.','Los niños piden dulces.','Son fiestas muy antiguas.'], a:0}
+       ],
+       hint:'¡Cuidado! Una de las tres fiestas probablemente no es antigua.'}
+    ]}
+  ],
+  speak:[
+    {q:'¿Te gusta Halloween? ¿Por qué?', s:'Sí, me gusta porque… / No, no me gusta porque…'},
+    {q:'¿Qué hay en tu ofrenda? ¿Para quién es?', s:'En mi ofrenda hay… · Es para… · Me gusta mucho…'},
+    {q:'¿Qué fiesta te gusta más: Halloween, el Día de Muertos o Zadushky?', s:'Me gusta más… porque… · En Ucrania nosotros…'}
+  ]
+},
+
+b1: {
+  label:'A2–B1',
+  intro:'Según la tradición mexica, los perros xoloitzcuintles acompañaban a las almas en su viaje por el <b>Mictlán</b>, el mundo de los muertos. Yo soy <b>Xolo</b> y esta noche tengo un problema: las almas quieren visitar a sus familias, pero el camino se ha quedado a oscuras. Para iluminarlo necesitas abrir <b>cinco puertas</b>. Detrás de cada una hay una letra; con las cinco formarás la <b>palabra secreta</b>.',
+  doors: [
+  { title:'¿Halloween o Día de Muertos?',
+    xolo:'Primera puerta. Mucha gente piensa que el Día de Muertos es «el Halloween mexicano». En realidad, son fiestas muy distintas. ¿Sabrías diferenciarlas?',
+    parts:[
+      {type:'choice', instr:'¿A qué fiesta se refiere cada frase: a Halloween, al Día de Muertos o a las dos?',
+       options:['Halloween','Día de Muertos','Las dos'],
+       items:[
+        {q:'La fiesta principal es la noche del 31 de octubre.', a:0},
+        {q:'Se celebra el 1 y el 2 de noviembre.', a:1},
+        {q:'Tiene raíces celtas.', a:0},
+        {q:'Mezcla tradiciones prehispánicas (mexicas) y católicas.', a:1},
+        {q:'La idea principal es pasar miedo y divertirse.', a:0},
+        {q:'Las familias creen que las almas vuelven a casa para visitarlas.', a:1},
+        {q:'Aparecen calaveras y esqueletos por todas partes.', a:2},
+        {q:'En 2008 la UNESCO la incluyó en la Lista Representativa del Patrimonio Cultural Inmaterial de la Humanidad.', a:1}
+       ],
+       hint:'Halloween viene de una antigua fiesta celta (Samhain) y juega con el miedo. El Día de Muertos une la tradición mexica con la católica y es una fiesta de recuerdo. Las calaveras aparecen en las dos.'}
+    ]},
+  { title:'Los símbolos de la ofrenda',
+    xolo:'Segunda puerta. Cada objeto de la ofrenda tiene un significado. Gira las tarjetas y memoriza las palabras y su significado: después tendrás que recordar las palabras sin verlas.',
+    parts:[
+      {type:'cards', instr:'Toca cada tarjeta para darle la vuelta. Memoriza la palabra y su significado.', cards:SYMB_B1},
+      {type:'type', instr:'¿Qué objeto es? Escribe la palabra. Te damos el artículo y la primera letra.', items:SYMB_B1, showPat:false, showFirst:true, showClue:true, showImg:false,
+       hint:'Las palabras son: copal, foto, agua, papel picado, veladora, sal, calavera de azúcar, cempasúchil, pan de muerto (en otro orden).'}
+    ]},
+  { title:'La leyenda del cempasúchil',
+    xolo:'Tercera puerta. Hay una leyenda popular mexicana muy bonita sobre el origen del cempasúchil. Léela con atención.',
+    reading:{title:'La leyenda del cempasúchil', img:'leyenda.jpg', emoji:'🌼', html:
+      '<p>Cuenta una leyenda popular mexicana que hace muchos siglos vivían dos jóvenes mexicas, Xóchitl y Huitzilin, que estaban muy enamorados. Desde niños, subían juntos a una montaña para llevar flores a Tonatiuh, el dios del Sol. Allí, una tarde, se prometieron amor eterno, incluso después de la muerte.</p>'+
+      '<p>Pero un día estalló una guerra y Huitzilin tuvo que ir a luchar. Unas semanas después, Xóchitl recibió una noticia terrible: Huitzilin había muerto en la batalla. Desesperada, subió por última vez a la montaña y le pidió al dios del Sol que la uniera para siempre con su amado.</p>'+
+      '<p>Tonatiuh se conmovió. Lanzó un rayo de sol sobre la joven y la convirtió en una flor de un intenso color naranja, como el propio sol. Poco después, un colibrí se posó sobre la flor, y esta abrió sus pétalos: era Huitzilin, que había vuelto en forma de pájaro.</p>'+
+      '<p>Desde entonces, mientras exista el cempasúchil, los dos enamorados seguirán juntos. Hoy esta flor, cuyo nombre en náhuatl significa «veinte flores», guía a las almas en el Día de Muertos.</p>'},
+    parts:[
+      {type:'order', instr:'Ordena los hechos de la leyenda. Toca las frases en el orden correcto.',
+       items:['Los jóvenes llevaban flores al dios del Sol.','Se prometieron amor eterno.','Huitzilin tuvo que ir a la guerra.','Xóchitl supo que Huitzilin había muerto.','El dios del Sol convirtió a Xóchitl en una flor.','Un colibrí se posó sobre la flor.'],
+       hint:'Primero hay una costumbre (llevaban), luego una promesa, la guerra, la noticia, la transformación y, al final, el pájaro.'},
+      {type:'choice', instr:'¿Verdadero o falso?', options:['Verdadero','Falso'],
+       items:[
+        {q:'Xóchitl y Huitzilin se conocieron de adultos.', a:1},
+        {q:'Huitzilin murió en una batalla.', a:0},
+        {q:'Xóchitl le pidió al dios del Sol que devolviera a Huitzilin a la vida.', a:1},
+        {q:'El dios del Sol convirtió a Huitzilin en una flor.', a:1},
+        {q:'Huitzilin volvió en forma de colibrí.', a:0},
+        {q:'La palabra «cempasúchil» viene del náhuatl.', a:0}
+       ],
+       hint:'Fíjate en «desde niños» y en lo que pidió exactamente Xóchitl: no quería que Huitzilin volviera a la vida, sino estar con él.'}
+    ]},
+  { title:'Una ofrenda para Frida',
+    xolo:'Cuarta puerta. Muchos museos dedican ofrendas a personas famosas. Hoy preparamos una para Frida Kahlo, que tenía perros xoloitzcuintles… ¡como yo!',
+    parts:[
+      {type:'gaps', instr:'Completa la biografía de Frida con el pretérito indefinido o el imperfecto.',
+       img:'casa-azul.jpg', emoji:'🏠',
+       html:'<p>Frida Kahlo [[0]] en 1907 en Coyoacán, en la Ciudad de México. Un día de septiembre de 1925 [[1]] un grave accidente de autobús. En ese momento [[2]] dieciocho años. Después del accidente [[3]] a pintar. Normalmente [[4]] autorretratos. Le [[5]] los colores fuertes y casi todos los días [[6]] flores en el pelo. En 1929 [[7]] con el pintor Diego Rivera. En su casa, la Casa Azul, siempre [[8]] muchos animales: monos, loros y perros xoloitzcuintles. Frida [[9]] en 1954, a los 47 años. Hoy la Casa Azul es un museo y en noviembre muchas personas le dedican ofrendas.</p>',
+       gaps:[{inf:'nacer',a:['nació']},{inf:'sufrir',a:['sufrió']},{inf:'tener',a:['tenía']},{inf:'empezar',a:['empezó']},{inf:'pintar',a:['pintaba']},{inf:'encantar',a:['encantaban']},{inf:'llevar',a:['llevaba']},{inf:'casarse',a:['se casó']},{inf:'haber',a:['había','hubo']},{inf:'morir',a:['murió']}],
+       hint:'Indefinido: hechos terminados y fechados (un día, en 1929, después del accidente). Imperfecto: descripciones, edad y costumbres (normalmente, casi todos los días, siempre). Ojo: «le encant…» concuerda con «los colores».'}
+    ]},
+  { title:'¿Tradición o invento?',
+    xolo:'Última puerta. En Ucrania también hay fechas para recordar a los antepasados. Pero ¡cuidado!: no todo lo que se lee en internet es una tradición antigua.',
+    reading:{title:'Tres tradiciones', open:true, note:'Completa los textos con <b>se</b> + el verbo en presente. ¿Singular o plural?', tri:[
+      {h:'El Día de Muertos (México)', img:'ofrenda.jpg', emoji:'🌼', p:'El 1 y el 2 de noviembre, en las casas [[0]] ofrendas con fotos, flores, comida y velas. Desde la puerta hasta la ofrenda [[1]] un camino de pétalos de cempasúchil, y [[2]] pan de muerto.'},
+      {h:'Zadushky · Задушки (Ucrania)', img:'zadushky.jpg', emoji:'🕯️', p:'La fiesta de Zadushky [[3]] a principios de noviembre, sobre todo en el oeste de Ucrania. Coincide con el Día de Todos los Santos y el Día de los Fieles Difuntos, las mismas fiestas católicas que están en el origen del Día de Muertos. Esos días [[4]] los cementerios y en las tumbas [[5]] velas.'},
+      {h:'La Noche de Veles · Велесова ніч (Ucrania)', img:'veles.jpg', emoji:'🌙', p:'En los últimos años, en las redes sociales [[6]] mucho de la Noche de Veles, del 31 de octubre al 1 de noviembre. [[7]] que esa noche los espíritus de los antepasados visitan a sus familias; por eso en la ventana [[8]] una vela y [[9]] comida para las almas. Sin embargo, muchos etnólogos creen que es una reconstrucción moderna: no hay fuentes antiguas fiables sobre esta fiesta.'}
+    ]},
+    parts:[
+      {type:'gaps', instr:'Completa los tres textos con se + verbo (por ejemplo: se pone / se ponen).', inReading:true,
+       gaps:[{inf:'poner',a:['se ponen','se montan']},{inf:'hacer',a:['se hace']},{inf:'comer',a:['se come']},{inf:'celebrar',a:['se celebra']},{inf:'visitar',a:['se visitan']},{inf:'encender',a:['se encienden']},{inf:'hablar',a:['se habla']},{inf:'decir',a:['se dice']},{inf:'poner',a:['se pone']},{inf:'dejar',a:['se deja']}],
+       hint:'Se + verbo en 3.ª persona. El verbo concuerda con lo que viene después: se pone una vela / se ponen velas. «Se dice que…» y «se habla de…» van siempre en singular.'},
+      {type:'choice', instr:'Según los textos, ¿de qué fiesta se habla?', options:['Día de Muertos','Zadushky','Noche de Veles'],
+       items:[
+        {q:'Comparte su origen católico con la fiesta mexicana.', a:1},
+        {q:'Se hace un camino de pétalos.', a:0},
+        {q:'Se ha hecho popular gracias a las redes sociales.', a:2},
+        {q:'Se celebra sobre todo en el oeste de Ucrania.', a:1},
+        {q:'Según los etnólogos, probablemente no es una tradición antigua.', a:2},
+        {q:'Se come un pan especial.', a:0}
+       ],
+       hint:'Noche de Veles = redes sociales, etnólogos. Zadushky = oeste de Ucrania, fiestas católicas. Día de Muertos = pétalos, pan.'}
+    ]}
+  ],
+  speak:[
+    {q:'¿Qué tienen en común el Día de Muertos y Zadushky? ¿Y en qué se diferencian?', s:'Las dos fiestas… · A diferencia de…, en… · Mientras que en México…, en Ucrania…'},
+    {q:'¿Por qué crees que la Noche de Veles se ha hecho tan popular en las redes?', s:'Creo que… · Puede ser que… · A mucha gente le gusta…'},
+    {q:'¿A qué persona famosa o personaje le harías una ofrenda? ¿Qué pondrías en ella?', s:'Le haría una ofrenda a… · Pondría… porque… · Le encantaba(n)…'}
+  ],
+  calaverita:true
+}
+};
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+var KEY='mictlan-dm-v1';
+var app=document.getElementById('app');
+var S=null;
+function load(){ try{ var v=localStorage.getItem(KEY); return v?JSON.parse(v):null; }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function clearState(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+(function(){
+  var q=location.search||'';
+  if(/[?&]reset=1/.test(q)){ clearState(); try{ history.replaceState(null,'',location.pathname); }catch(e){} }
+})();
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+function el(tag,cls,html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+function norm(s){ return String(s||'').toLowerCase().replace(/[’`´]/g,"'").replace(/[«»"“”.,;:!¡?¿]/g,' ').replace(/\s+/g,' ').trim(); }
+function bare(s){ return norm(s).normalize('NFD').replace(/[̀-ͯ]/g,''); }
+function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+function stripArt(s){ return s.replace(/^(el|la|los|las|un|una|unos|unas) /,''); }
+// devuelve 'ok' | 'warn' (solo tildes) | 'bad'
+function judge(val, answers, allowArt){
+  var v=norm(val); if(!v) return 'bad';
+  var list=[]; answers.forEach(function(a){ list.push(norm(a)); });
+  if(allowArt){ v=stripArt(v); list=list.map(stripArt); }
+  if(list.indexOf(v)>-1) return 'ok';
+  var vb=bare(v), lb=list.map(function(a){return a.normalize('NFD').replace(/[̀-ͯ]/g,'');});
+  if(lb.indexOf(vb)>-1) return 'warn';
+  return 'bad';
+}
+function pattern(word){ return word.split(' ').map(function(w){ return w.charAt(0)+' '+Array(w.length).join('_ ').trim(); }).join('   '); }
+function fmt(ms){ var s=Math.max(0,Math.floor(ms/1000)); var m=Math.floor(s/60); s=s%60; return (m<10?'0':'')+m+':'+(s<10?'0':'')+s; }
+
+/* imagen con alternativa si el archivo no existe */
+function pic(src, emoji, cls){
+  var d=el('div','pic'+(cls?' '+cls:''));
+  var fb=el('div','fb',emoji||'🌼');
+  if(src){
+    var im=new Image(); im.alt=''; im.loading='lazy'; im.decoding='async';
+    im.onerror=function(){ if(im.parentNode) im.parentNode.removeChild(im); d.appendChild(fb); };
+    im.src=src; d.appendChild(im);
+  } else d.appendChild(fb);
+  return d;
+}
+
+/* papel picado decorativo */
+(function(){
+  var svg=document.getElementById('picado'), cols=['#C8203F','#F5A300','#6F48A8','#1F8A82','#D6336C','#E8730C','#5B9BD5'];
+  var w=1200/16, h='';
+  h+='<path d="M0 6 Q600 16 1200 6" stroke="#5B6478" stroke-width="1.5" fill="none"/>';
+  for(var i=0;i<16;i++){
+    var x=i*w+4, c=cols[i%cols.length], y=7+Math.sin(i/15*Math.PI)*4;
+    h+='<path d="M'+x+' '+y+' h'+(w-8)+' v38 l-'+((w-8)/4)+' 12 l-'+((w-8)/4)+' -9 l-'+((w-8)/4)+' 9 l-'+((w-8)/4)+' -12 z" fill="'+c+'"/>';
+    var cx=x+(w-8)/2, cy=y+22;
+    h+='<circle cx="'+cx+'" cy="'+cy+'" r="6" fill="#F3F7FB"/>';
+    h+='<path d="M'+(cx-15)+' '+(cy)+' l5 -5 l5 5 l-5 5 z M'+(cx+5)+' '+cy+' l5 -5 l5 5 l-5 5 z" fill="#F3F7FB"/>';
+    h+='<circle cx="'+(cx-12)+'" cy="'+(y+8)+'" r="2.5" fill="#F3F7FB"/><circle cx="'+cx+'" cy="'+(y+8)+'" r="2.5" fill="#F3F7FB"/><circle cx="'+(cx+12)+'" cy="'+(y+8)+'" r="2.5" fill="#F3F7FB"/>';
+    h+='<path d="M'+(cx-10)+' '+(y+36)+' h20" stroke="#F3F7FB" stroke-width="3" stroke-dasharray="3 3"/>';
+  }
+  svg.innerHTML=h;
+})();
+
+/* ============================================================
+   CABECERA: puertas y reloj
+   ============================================================ */
+var doorsEl=document.getElementById('doors'), clockEl=document.getElementById('clock');
+function drawDoors(){
+  doorsEl.innerHTML='';
+  for(var i=0;i<5;i++){
+    var d=el('div','door-dot');
+    if(S && S.letters && S.letters[i]){ d.classList.add('open'); d.textContent=S.letters[i]; }
+    else d.textContent=i+1;
+    if(S && !S.done && S.door===i && S.started) d.classList.add('now');
+    doorsEl.appendChild(d);
+  }
+}
+setInterval(function(){
+  if(S && S.t0){ clockEl.textContent=fmt((S.tEnd||Date.now())-S.t0); }
+  else clockEl.textContent='00:00';
+},500);
+
+/* ============================================================
+   TECLADO DE TILDES
+   ============================================================ */
+var accents=document.getElementById('accents'), lastInput=null, lastSel=[0,0];
+['á','é','í','ó','ú','ñ','ü','¿','¡'].forEach(function(ch){
+  var b=el('button',null,ch); b.type='button'; b.tabIndex=-1;
+  var ins=function(e){ e.preventDefault(); insertChar(ch); };
+  b.addEventListener('touchstart',ins,{passive:false});
+  b.addEventListener('mousedown',ins);
+  b.addEventListener('click',function(e){ e.preventDefault(); });
+  accents.appendChild(b);
+});
+function track(inp){
+  var upd=function(){ lastInput=inp; try{ lastSel=[inp.selectionStart, inp.selectionEnd]; }catch(e){} };
+  ['focus','keyup','click','input','select','touchend'].forEach(function(ev){ inp.addEventListener(ev,upd); });
+}
+function insertChar(ch){
+  var inp=(document.activeElement && document.activeElement.classList && document.activeElement.classList.contains('ac'))?document.activeElement:lastInput;
+  if(!inp || inp.disabled || !document.body.contains(inp)) return;
+  var s,e;
+  if(document.activeElement===inp){ s=inp.selectionStart; e=inp.selectionEnd; }
+  else { s=lastSel[0]; e=lastSel[1]; }
+  if(s==null){ s=e=inp.value.length; }
+  inp.focus({preventScroll:true});
+  try{ inp.setRangeText(ch,s,e,'end'); }
+  catch(err){ inp.value=inp.value.slice(0,s)+ch+inp.value.slice(e); inp.selectionStart=inp.selectionEnd=s+ch.length; }
+  lastInput=inp; lastSel=[inp.selectionStart, inp.selectionEnd];
+  inp.dispatchEvent(new Event('input',{bubbles:true}));
+}
+function showAccents(on){ accents.classList.toggle('hidden',!on); }
+function mkInput(cls, w){
+  var i=el('input',cls); i.type='text'; i.className=(cls||'')+' ac';
+  i.setAttribute('autocomplete','off'); i.setAttribute('autocorrect','off'); i.setAttribute('autocapitalize','off'); i.setAttribute('spellcheck','false');
+  if(w) i.style.width=w;
+  track(i); return i;
+}
+
+/* ============================================================
+   PANTALLAS
+   ============================================================ */
+function scrollTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
+
+function startScreen(){
+  showAccents(false); app.innerHTML='';
+  var hero=el('div','hero'); hero.appendChild(pic('hero.jpg','💀🌼')); app.appendChild(hero);
+  var c=el('div','card');
+  c.innerHTML='<div class="eyebrow">Escape room · Día de Muertos</div><h1>Viaje al Mictlán</h1>'+
+    '<p>Cinco puertas, cinco letras y una palabra secreta. Abre cada puerta con tu español para que las almas encuentren el camino a casa.</p>'+
+    '<p class="small">Tiempo recomendado: 40 minutos · Puedes usar pistas, pero cada pista cuenta.</p>';
+  var lab=el('label','f','Tu nombre'); c.appendChild(lab);
+  var name=mkInput('txt'); name.placeholder='Nombre y apellido'; name.value=(S&&S.name)||''; c.appendChild(name);
+  c.appendChild(el('label','f','Elige tu nivel'));
+  var lv=el('div','levels'), chosen=null;
+  [['a1','A1','Primer contacto: hay, está, adjetivos, presente'],['b1','A2–B1','Indefinido e imperfecto, se + verbo, leyenda']].forEach(function(o){
+    var b=el('button','lvl','<strong>'+o[1]+'</strong><span>'+o[2]+'</span>'); b.type='button';
+    b.onclick=function(){ chosen=o[0]; [].forEach.call(lv.children,function(x){x.classList.remove('sel');}); b.classList.add('sel'); check(); };
+    lv.appendChild(b);
+  });
+  c.appendChild(lv);
+  var acts=el('div','actions'); var go=el('button','btn','Empezar el viaje →'); go.disabled=true; acts.appendChild(go); c.appendChild(acts);
+  function check(){ go.disabled=!(chosen && norm(name.value).length>=2); }
+  name.addEventListener('input',check);
+  go.onclick=function(){
+    if(go.disabled) return;
+    S={lv:chosen,name:name.value.trim(),door:0,part:0,letters:[],t0:Date.now(),hints:0,errors:0,started:true,phase:'story'};
+    save(); drawDoors(); route();
+  };
+  app.appendChild(c);
+  // en pantalla de inicio el teclado de tildes ayuda con el nombre
+  name.addEventListener('focus',function(){ showAccents(true); });
+}
+
+function xoloBlock(html){
+  var x=el('div','xolo'); x.appendChild(pic('xolo.jpg','🐕','ava'));
+  x.appendChild(el('div','bubble',html)); return x;
+}
+
+function storyScreen(){
+  showAccents(false); app.innerHTML='';
+  var L=LEVELS[S.lv], D=L.doors[S.door];
+  var c=el('div','card');
+  c.appendChild(el('div','eyebrow','Puerta '+(S.door+1)+' de 5 · Nivel '+L.label));
+  c.appendChild(el('h2',null,esc(D.title)));
+  if(S.door===0) c.appendChild(xoloBlock(L.intro));
+  if(S.door===0) c.appendChild(el('div',null,'&nbsp;'));
+  c.appendChild(xoloBlock(D.xolo));
+  var a=el('div','actions'); var b=el('button','btn','Abrir la puerta →'); a.appendChild(b); c.appendChild(a);
+  b.onclick=function(){ S.phase='task'; S.part=0; save(); route(); };
+  app.appendChild(c); drawDoors(); scrollTop();
+}
+
+/* lectura (texto o tres textos); devuelve lista de huecos si tiene [[n]] */
+function readingBlock(R, gapPart, door){
+  var d=el('details','reading'); d.open=true;
+  d.appendChild(el('summary',null,'📜 '+esc(R.title)));
+  var body=el('div','rtext');
+  var gapEls=[];
+  if(R.note) body.appendChild(el('p','small',R.note));
+  if(R.html){
+    if(R.img){ var w=el('div','rimg'); w.appendChild(pic(R.img,R.emoji)); body.appendChild(w); }
+    body.insertAdjacentHTML('beforeend',R.html);
+  }
+  if(R.tri){
+    var t=el('div','tri');
+    R.tri.forEach(function(x){
+      var b=el('div');
+      if(x.img){ var tp=pic(x.img,x.emoji); tp.style.aspectRatio='16/7'; tp.style.marginBottom='10px'; b.appendChild(tp); }
+      b.appendChild(el('h3',null,esc(x.h)));
+      var p=el('p',gapPart?'gaptext':null);
+      if(gapPart){ fillGaps(p, x.p, gapPart, gapEls); }
+      else {
+        var gp=null; (door&&door.parts||[]).forEach(function(pp){ if(pp.inReading) gp=pp; });
+        p.innerHTML=esc(x.p).replace(/\[\[(\d+)\]\]/g,function(m,n){ return gp?'<b style="color:var(--ok)">'+esc(gp.gaps[+n].a[0])+'</b>':'…'; });
+      }
+      b.appendChild(p); t.appendChild(b);
+    });
+    body.appendChild(t);
+  }
+  d.appendChild(body);
+  return {node:d, gaps:gapEls};
+}
+
+function taskScreen(){
+  app.innerHTML='';
+  var L=LEVELS[S.lv], D=L.doors[S.door], P=D.parts[S.part];
+  var head=el('div','card');
+  head.appendChild(el('div','eyebrow','Puerta '+(S.door+1)+' · '+esc(D.title)+(D.parts.length>1?' · Parte '+(S.part+1)+' de '+D.parts.length:'')));
+  head.appendChild(el('h3',null,esc(P.instr)));
+  app.appendChild(head);
+  var gapEls=null;
+  if(D.reading && P.type!=='cards'){
+    var rb=readingBlock(D.reading, P.inReading?P:null, D);
+    app.appendChild(rb.node); if(P.inReading) gapEls=rb.gaps;
+  }
+  var box=el('div','card'); app.appendChild(box);
+  var api;
+  if(P.type==='choice') api=renderChoice(box,P);
+  else if(P.type==='cards') api=renderCards(box,P);
+  else if(P.type==='type') api=renderType(box,P);
+  else if(P.type==='gaps') api=renderGaps(box,P,gapEls);
+  else if(P.type==='order') api=renderOrder(box,P);
+  showAccents(P.type==='type'||P.type==='gaps');
+
+  var fbl=el('div','fb-line'); box.appendChild(fbl);
+  var hintBox=el('div','hintbox hidden'); box.appendChild(hintBox);
+  var acts=el('div','actions'); box.appendChild(acts);
+  var chk=el('button','btn',P.type==='cards'?'Siguiente →':'Comprobar');
+  acts.appendChild(chk);
+  var hb=null;
+  if(P.hint){ hb=el('button','btn ghost','💡 Pista'); acts.appendChild(hb);
+    hb.onclick=function(){ if(!hintBox.classList.contains('hidden')) return; hintBox.innerHTML='<b>Pista:</b> '+esc(P.hint); hintBox.classList.remove('hidden'); S.hints++; save(); hb.disabled=true; };
+  }
+  var busy=false;
+  chk.onclick=function(){
+    if(busy) return; busy=true; setTimeout(function(){busy=false;},600);
+    if(chk.dataset.next){ nextPart(); return; }
+    var r=api.check();
+    if(r.done){
+      fbl.className='fb-line ok'; fbl.textContent=P.type==='cards'?'':'¡Perfecto! Todo correcto.';
+      if(P.type==='cards'){ nextPart(); return; }
+      chk.textContent='Continuar →'; chk.dataset.next='1'; if(hb) hb.disabled=true;
+      showAccents(false);
+    } else {
+      if(P.type!=='cards') S.errors++; save();
+      fbl.className='fb-line '+(r.warnOnly?'warn':'bad');
+      fbl.textContent=r.msg;
+    }
+  };
+  // Enter = comprobar
+  box.addEventListener('keydown',function(e){ if(e.key==='Enter' && e.target.tagName==='INPUT'){ e.preventDefault(); chk.click(); } });
+  if(gapEls) app.querySelector('.reading').addEventListener('keydown',function(e){ if(e.key==='Enter' && e.target.tagName==='INPUT'){ e.preventDefault(); chk.click(); } });
+  drawDoors(); scrollTop();
+}
+
+function nextPart(){
+  var D=LEVELS[S.lv].doors[S.door];
+  if(S.part+1<D.parts.length){ S.part++; save(); route(); }
+  else { S.letters[S.door]=LETTERS[S.door]; S.phase='unlock'; save(); route(); }
+}
+
+function unlockScreen(){
+  showAccents(false); app.innerHTML='';
+  var c=el('div','card unlock');
+  c.appendChild(el('div','eyebrow','Puerta '+(S.door+1)+' abierta'));
+  c.appendChild(el('h2',null,'¡La puerta se abre!'));
+  c.appendChild(el('p',null,'Detrás de la puerta encuentras una letra:'));
+  c.appendChild(el('div','bigletter',LETTERS[S.door]));
+  var lt=el('div','letters'); S.letters.forEach(function(x){ if(x) lt.appendChild(el('span',null,x)); }); c.appendChild(lt);
+  var a=el('div','actions'); a.style.justifyContent='center';
+  var b=el('button','btn',S.door<4?'Siguiente puerta →':'Formar la palabra secreta →'); a.appendChild(b); c.appendChild(a);
+  b.onclick=function(){ if(S.door<4){ S.door++; S.part=0; S.phase='story'; } else { S.phase='final'; } save(); route(); };
+  app.appendChild(c); drawDoors(); scrollTop();
+}
+
+function finalScreen(){
+  app.innerHTML='';
+  var c=el('div','card unlock');
+  c.appendChild(el('div','eyebrow','La palabra secreta'));
+  c.appendChild(el('h2',null,'Ordena las letras'));
+  var lt=el('div','letters'); LETTERS.forEach(function(x){ lt.appendChild(el('span',null,x)); }); c.appendChild(lt);
+  c.appendChild(xoloBlock('Pista de Xolo: ¿quién visita a las familias en el Día de Muertos?'));
+  var inp=mkInput('txt'); inp.placeholder='La palabra secreta'; inp.style.marginTop='16px'; inp.style.textAlign='center'; c.appendChild(inp);
+  var fbl=el('div','fb-line'); c.appendChild(fbl);
+  var a=el('div','actions'); a.style.justifyContent='center'; var b=el('button','btn gold','Iluminar el camino ✨'); a.appendChild(b); c.appendChild(a);
+  function go(){
+    var r=judge(inp.value,['almas','las almas'],false);
+    if(r==='ok'){ S.done=true; S.tEnd=Date.now(); S.phase='done'; save(); route(); }
+    else { S.errors++; save(); fbl.className='fb-line bad'; fbl.textContent='Mmm… no es esa. Usa las cinco letras.'; }
+  }
+  b.onclick=go; inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); go(); } });
+  app.appendChild(c); showAccents(false); drawDoors(); scrollTop();
+}
+
+function doneScreen(){
+  showAccents(false); app.innerHTML='';
+  var L=LEVELS[S.lv];
+  var c=el('div','card');
+  var cert=el('div','cert');
+  cert.innerHTML='<div class="eyebrow">Viaje al Mictlán · Nivel '+L.label+'</div>'+
+    '<h2>¡Las almas ya ven el camino!</h2><p>Gracias a</p><div class="who">'+esc(S.name)+'</div>'+
+    '<p>las almas han llegado a casa. La palabra secreta era <b>ALMAS</b>.</p>';
+  var st=el('div','stats');
+  st.innerHTML='<div class="stat">Tiempo<b>'+fmt(S.tEnd-S.t0)+'</b></div><div class="stat">Pistas<b>'+S.hints+'</b></div><div class="stat">Intentos fallidos<b>'+S.errors+'</b></div>';
+  cert.appendChild(st);
+  cert.appendChild(el('p','small','📸 Haz una captura de pantalla y enséñasela a tu profesora.'));
+  c.appendChild(cert);
+  app.appendChild(c);
+
+  var sp=el('div','card');
+  sp.appendChild(el('div','eyebrow','Para hablar en clase'));
+  sp.appendChild(el('h2',null,'¡Ahora habla!'));
+  var g=el('div','speak');
+  L.speak.forEach(function(x){ g.appendChild(el('div','sq','<b>'+esc(x.q)+'</b><span>'+esc(x.s)+'</span>')); });
+  sp.appendChild(g); app.appendChild(sp);
+
+  if(L.calaverita){
+    var cv=el('div','card');
+    cv.innerHTML='<div class="eyebrow">Reto extra</div><h2>Escribe una calaverita</h2>'+
+      '<p>Las <b>calaveritas literarias</b> son versos cortos y divertidos, con rima, en los que la Muerte visita a alguien. Se escriben con humor y con cariño. Aquí tienes un ejemplo:</p>'+
+      '<div class="poem">La Catrina vino a clase<br>buscando a quién llevar,<br>pero vio los irregulares<br>¡y se fue sin respirar!</div>'+
+      '<p>Escribe tu calaverita (cuatro versos) para un personaje de un libro o de una película… o para tu profe.</p>';
+    app.appendChild(cv);
+  }
+  var a=el('div','actions'); a.style.justifyContent='center';
+  var again=el('button','btn ghost','Jugar otra vez'); a.appendChild(again); app.appendChild(a);
+  again.onclick=function(){ if(confirm('¿Empezar de nuevo?')){ clearState(); S=null; drawDoors(); startScreen(); } };
+  drawDoors(); scrollTop();
+}
+
+/* ============================================================
+   TIPOS DE TAREA
+   ============================================================ */
+function renderChoice(box,P){
+  var wrap=el('div','items'), state=[];
+  P.items.forEach(function(it,i){
+    var row=el('div','item'); row.appendChild(el('div','q','<span class="num">'+(i+1)+'</span>'+esc(it.q)));
+    var opts=el('div','opts'); var list=it.opts||P.options;
+    state[i]={sel:null,row:row,ok:false};
+    list.forEach(function(o,k){
+      var b=el('button','opt',esc(o)); b.type='button';
+      b.onclick=function(){ if(state[i].ok) return; state[i].sel=k; [].forEach.call(opts.children,function(x){x.classList.remove('sel');}); b.classList.add('sel'); row.classList.remove('bad'); };
+      opts.appendChild(b);
+    });
+    row.appendChild(opts); wrap.appendChild(row);
+  });
+  box.appendChild(wrap);
+  return {check:function(){
+    var missing=0, wrong=0;
+    P.items.forEach(function(it,i){
+      var s=state[i]; if(s.ok) return;
+      if(s.sel===null){ missing++; return; }
+      if(s.sel===it.a){ s.ok=true; s.row.classList.remove('bad'); s.row.classList.add('ok'); }
+      else { wrong++; s.row.classList.add('bad'); }
+    });
+    if(missing) return {done:false,msg:'Te faltan '+missing+' respuesta'+(missing>1?'s':'')+'.'};
+    if(wrong) return {done:false,msg:'Hay '+wrong+' respuesta'+(wrong>1?'s':'')+' incorrecta'+(wrong>1?'s':'')+'. ¡Inténtalo otra vez!'};
+    return {done:true};
+  }};
+}
+
+function renderCards(box,P){
+  var g=el('div','cards'), seen=0, total=P.cards.length;
+  P.cards.forEach(function(cd){
+    var f=el('button','flip'); f.type='button';
+    var inn=el('div','in');
+    var fr=el('div','face front'); fr.appendChild(pic(cd.img,cd.emoji)); fr.appendChild(el('div','w',esc(cd.art+' '+cd.main)));
+    var bk=el('div','face back'); bk.appendChild(el('div','w',esc(cd.art+' '+cd.main))); bk.appendChild(el('p',null,esc(cd.back)));
+    inn.appendChild(fr); inn.appendChild(bk); f.appendChild(inn);
+    f.onclick=function(){ f.classList.toggle('on'); if(!f.dataset.s){ f.dataset.s=1; f.classList.add('seen'); seen++; } };
+    g.appendChild(f);
+  });
+  box.appendChild(g);
+  return {check:function(){
+    if(seen<total) return {done:false,warnOnly:true,msg:'Dale la vuelta a todas las tarjetas ('+seen+'/'+total+').'};
+    return {done:true};
+  }};
+}
+
+function renderType(box,P){
+  var g=el('div','tgrid'), rows=[];
+  shuffle(P.items).forEach(function(it){
+    var c=el('div','titem');
+    if(P.showImg) c.appendChild(pic(it.img,it.emoji));
+    if(P.showClue) c.appendChild(el('div','clue',esc(it.back)));
+    if(P.showPat) c.appendChild(el('div','pat',esc(it.art+'  '+pattern(it.main.toLowerCase()))));
+    var a=el('div','ans'); a.appendChild(el('span','art',esc(it.art)));
+    var inp=mkInput('txt'); if(P.showFirst) inp.placeholder=it.main.charAt(0).toLowerCase()+'…';
+    a.appendChild(inp); c.appendChild(a);
+    var note=el('div','note'); c.appendChild(note);
+    inp.addEventListener('input',function(){ if(!c.classList.contains('ok')){ c.classList.remove('bad','warn'); note.textContent=''; } });
+    rows.push({it:it,c:c,inp:inp,note:note,ok:false});
+    g.appendChild(c);
+  });
+  box.appendChild(g);
+  return {check:function(){
+    var bad=0,warn=0,empty=0;
+    rows.forEach(function(r){
+      if(r.ok) return;
+      if(!norm(r.inp.value)){ empty++; return; }
+      var j=judge(r.inp.value,[r.it.main].concat(r.it.alts),true);
+      r.c.classList.remove('bad','warn');
+      if(j==='ok'){ r.ok=true; r.c.classList.add('ok'); r.inp.disabled=true; r.note.textContent=''; }
+      else if(j==='warn'){ warn++; r.c.classList.add('warn'); r.note.className='note warn'; r.note.textContent='¡Casi! Revisa la tilde o la ñ.'; }
+      else { bad++; r.c.classList.add('bad'); r.note.className='note bad'; r.note.textContent='No es correcto.'; }
+    });
+    if(empty) return {done:false,msg:'Te faltan '+empty+' palabra'+(empty>1?'s':'')+'.'};
+    if(bad||warn) return {done:false,warnOnly:!bad,msg:bad?('Hay '+(bad+warn)+' palabra'+((bad+warn)>1?'s':'')+' por corregir.'):'¡Casi! Solo faltan tildes.'};
+    return {done:true};
+  }};
+}
+
+function fillGaps(container, src, P, list){
+  var parts=src.split(/\[\[(\d+)\]\]/);
+  for(var i=0;i<parts.length;i++){
+    if(i%2===0){ container.appendChild(document.createTextNode(parts[i])); continue; }
+    var n=+parts[i], G=P.gaps[n];
+    var span=el('span','gap');
+    var longest=G.a.reduce(function(m,x){return Math.max(m,x.length);},0);
+    var inp=mkInput(null, Math.max(7,longest+3)+'ch');
+    span.appendChild(el('span','n',String(n+1)));
+    span.appendChild(inp); span.appendChild(el('span','inf','('+esc(G.inf)+')'));
+    inp.addEventListener('input',function(){ if(!this.parentNode.classList.contains('ok')) this.parentNode.classList.remove('bad','warn'); });
+    container.appendChild(span);
+    list[n]={span:span,inp:inp,G:G,ok:false};
+  }
+}
+function renderGaps(box,P,external){
+  var list=external;
+  if(!list){
+    list=[];
+    if(P.img){ var w=el('div','rimg'); w.style.maxWidth='420px'; w.style.margin='0 auto 14px'; var pp=pic(P.img,P.emoji); pp.style.aspectRatio='4/3'; w.appendChild(pp); box.appendChild(w); }
+    var t=el('div','gaptext');
+    var tmp=document.createElement('div'); tmp.innerHTML=P.html;
+    [].forEach.call(tmp.children,function(node){
+      var p=el(node.tagName.toLowerCase()); fillGaps(p,node.textContent,P,list); t.appendChild(p);
+    });
+    box.appendChild(t);
+  } else {
+    box.appendChild(el('p','small','Escribe en los huecos de los textos de arriba ↑'));
+  }
+  return {check:function(){
+    var bad=0,warn=0,empty=0;
+    list.forEach(function(r){
+      if(r.ok) return;
+      if(!norm(r.inp.value)){ empty++; return; }
+      var j=judge(r.inp.value,r.G.a,false);
+      r.span.classList.remove('bad','warn');
+      if(j==='ok'){ r.ok=true; r.span.classList.add('ok'); r.inp.disabled=true; }
+      else if(j==='warn'){ warn++; r.span.classList.add('warn'); }
+      else { bad++; r.span.classList.add('bad'); }
+    });
+    if(empty) return {done:false,msg:'Te faltan '+empty+' hueco'+(empty>1?'s':'')+'.'};
+    if(bad||warn){
+      var m=[]; if(bad) m.push(bad+' incorrecto'+(bad>1?'s':'')+' (en rojo)'); if(warn) m.push(warn+' con la tilde mal (en amarillo)');
+      return {done:false,warnOnly:!bad,msg:'Revisa: '+m.join(' y ')+'.'};
+    }
+    return {done:true};
+  }};
+}
+
+function renderOrder(box,P){
+  var seq=el('div','seq'), pool=el('div','pool');
+  var correct=P.items.slice(), locked=0;
+  box.appendChild(el('div','small','Tu orden:')); box.appendChild(seq);
+  box.appendChild(el('div','small','Frases:')); box.appendChild(pool);
+  function mk(text){
+    var b=el('button','chip'); b.type='button'; b.innerHTML='<span class="k"></span><span>'+esc(text)+'</span>'; b.dataset.t=text;
+    b.onclick=function(){
+      if(b.classList.contains('ok')) return;
+      if(b.parentNode===pool) seq.appendChild(b); else pool.appendChild(b);
+      renum();
+    };
+    return b;
+  }
+  function renum(){ [].forEach.call(seq.children,function(x,i){ x.querySelector('.k').textContent=(i+1)+'.'; }); [].forEach.call(pool.children,function(x){ x.querySelector('.k').textContent='•'; }); }
+  var sh=shuffle(correct); if(sh.join('|')===correct.join('|')) sh.reverse();
+  sh.forEach(function(t){ pool.appendChild(mk(t)); }); renum();
+  return {check:function(){
+    if(pool.children.length) return {done:false,msg:'Coloca todas las frases primero.'};
+    var kids=[].slice.call(seq.children), wrong=[];
+    kids.forEach(function(k,i){ if(k.dataset.t===correct[i]) k.classList.add('ok'); else wrong.push(k); });
+    if(!wrong.length) return {done:true};
+    // las que están bien se quedan; las demás vuelven a las frases
+    wrong.forEach(function(k){ k.classList.add('flash'); });
+    setTimeout(function(){
+      // las bien colocadas al principio, en su sitio
+      var keep=kids.filter(function(k){return k.classList.contains('ok');});
+      seq.innerHTML='';
+      var firstWrong=kids.findIndex(function(k){return !k.classList.contains('ok');});
+      kids.forEach(function(k,i){
+        if(i<firstWrong){ seq.appendChild(k); }
+        else { k.classList.remove('ok','flash'); pool.appendChild(k); }
+      });
+      renum();
+    },450);
+    var good=0; while(good<kids.length && kids[good].dataset.t===correct[good]) good++;
+    return {done:false,msg: good===0 ? 'La primera frase no es correcta. ¡Inténtalo otra vez!' : (good===1 ? 'La primera frase está bien. Ordena las demás.' : 'Las primeras '+good+' frases están bien. Ordena las demás.')};
+  }};
+}
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+function route(){
+  if(!S){ startScreen(); drawDoors(); return; }
+  if(S.phase==='story') return storyScreen();
+  if(S.phase==='task') return taskScreen();
+  if(S.phase==='unlock') return unlockScreen();
+  if(S.phase==='final') return finalScreen();
+  if(S.phase==='done') return doneScreen();
+  startScreen();
+}
+S=load();
+if(S && !LEVELS[S.lv]) { S=null; clearState(); }
+route(); drawDoors();
+});
+</script>
+</body>
+</html>
