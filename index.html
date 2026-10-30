@@ -46,8 +46,42 @@ button{font:inherit;cursor:pointer}
 .doors{display:flex;gap:6px}
 .door-dot{width:30px;height:36px;border-radius:15px 15px 4px 4px;border:2px solid var(--line);background:#fff;display:grid;place-items:center;font-family:"JetBrains Mono",monospace;font-weight:700;font-size:.85rem;color:var(--muted)}
 .door-dot.open{background:var(--marigold);border-color:var(--orange);color:#fff}
+.door-dot.nolet{background:#E9EDF3;border-color:#C5CFDC;color:var(--muted)}
 .door-dot.now{border-color:var(--red);box-shadow:0 0 0 3px rgba(200,32,63,.15)}
-.clock{font-family:"JetBrains Mono",monospace;font-size:.9rem;color:var(--muted);white-space:nowrap}
+.rec{margin-top:10px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 12px}
+.rec.on{border-color:var(--red);box-shadow:0 0 0 3px rgba(200,32,63,.12)}
+.rec.done{border-color:var(--ok)}
+.rec.need{border-color:var(--bad);background:var(--bad-bg)}
+.recrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.recbtn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:10px 18px;font-weight:700;background:var(--red);color:#fff;box-shadow:0 3px 0 var(--red-d)}
+.recbtn .dot{width:12px;height:12px;border-radius:50%;background:#fff}
+.rec.on .recbtn .dot{border-radius:2px;animation:blink 1s infinite}
+.recbtn[disabled]{opacity:.5}
+@keyframes blink{50%{opacity:.3}}
+.recinfo{font-weight:600;color:var(--muted);font-size:.95rem}
+.recinfo.bad{color:var(--bad)}
+.rec.done .recinfo{color:var(--ok)}
+.meter{height:6px;border-radius:3px;background:var(--blue-l);margin-top:8px;overflow:hidden;display:none}
+.rec.on .meter{display:block}
+.meter i{display:block;height:100%;width:0;background:var(--ok);transition:width .1s}
+.recout audio{width:100%;margin-top:8px}
+.dl{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+.dl p{flex-basis:100%;margin:0}
+.dl a.btn{text-decoration:none}
+textarea.txt{display:block;width:100%;font:inherit;font-size:1.02rem;padding:12px 14px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);outline:none;resize:vertical;min-height:96px;line-height:1.45;margin-top:10px}
+textarea.txt:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(179,209,237,.6)}
+.txt.need{border-color:var(--bad);background:var(--bad-bg)}
+.txt:disabled{background:#F6F8FB;color:var(--ink)}
+.speak .sq span{display:block}
+.remark{background:var(--warn-bg);border-left:4px solid var(--marigold);border-radius:8px;padding:10px 14px}
+.verses,.ocard{display:grid;gap:10px;margin-top:6px}
+.ocard{border:2px solid var(--marigold);border-radius:14px;padding:14px;background:#FFF8E8}
+.verse{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center;font-weight:600;color:var(--muted)}
+.ocard .verse{grid-template-columns:190px 1fr}
+.card.send{text-align:center}
+.toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:600;opacity:0;transition:.25s;z-index:50;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:520px){ .verse,.ocard .verse{grid-template-columns:1fr;gap:4px} }
 .hidden{display:none!important}
 
 main{max-width:820px;margin:0 auto;padding:8px 16px 140px}
@@ -63,6 +97,9 @@ main{max-width:820px;margin:0 auto;padding:8px 16px 140px}
 /* pictures with fallback */
 .pic{position:relative;width:100%;aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:var(--blue-l)}
 .pic img{width:100%;height:100%;object-fit:cover;display:block}
+.xolo .ava img{object-position:50% 50%}
+.flip .face .pic.photo{border-radius:10px}
+.hero .pic.photo img{object-position:50% 45%}
 .pic.svg{background:transparent}
 .pic.svg svg{width:100%;height:100%;display:block}
 .pic .fb{position:absolute;inset:0;display:grid;place-items:center;font-size:3rem;background:linear-gradient(135deg,var(--blue-l),#fff 60%,#FFE7B8)}
@@ -102,8 +139,8 @@ details.reading .rtext p{margin:0 0 .75em}
 .audio{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#fff;border:1px solid #F3DDB0;border-radius:12px;padding:8px 12px;margin:0 0 14px}
 .audio span{font-weight:700;color:var(--purple)}
 .audio audio{flex:1;min-width:220px;height:40px}
-.reading .rimg{max-width:420px;margin:4px auto 14px}
-.reading .rimg .pic{aspect-ratio:4/3}
+.reading .rimg{max-width:260px;margin:4px auto 14px}
+.reading .rimg .pic{aspect-ratio:1/1}
 .tri{display:grid;gap:12px;margin-bottom:8px}
 .tri h3{color:var(--purple);margin-bottom:.25em}
 
@@ -120,6 +157,14 @@ details.reading .rtext p{margin:0 0 .75em}
 .item.bad{border-color:var(--bad);background:var(--bad-bg)}
 .item.warn{border-color:var(--marigold);background:var(--warn-bg)}
 .item.ok .opt{pointer-events:none}
+.item.shown{border-color:var(--marigold);background:var(--warn-bg)}
+.item.shown .opt{pointer-events:none;opacity:.7}
+.item.shown .opt.right{opacity:1;background:var(--ok);border-color:var(--ok);color:#fff}
+.titem.shown{border-color:var(--marigold);background:var(--warn-bg)}
+.note.sol{color:var(--ok);font-size:.95rem}
+.gap .sol{color:var(--ok);font-weight:700;font-size:.95rem}
+.gap.shown input{border-color:var(--marigold);background:var(--warn-bg);text-decoration:line-through;color:var(--muted)}
+.chip.shown{border-color:var(--marigold);background:var(--warn-bg);pointer-events:none}
 
 /* flip cards */
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
@@ -175,6 +220,8 @@ details.reading .rtext p{margin:0 0 .75em}
 .unlock{text-align:center}
 .bigletter{display:inline-grid;place-items:center;width:110px;height:130px;border-radius:55px 55px 12px 12px;background:var(--marigold);color:#fff;font-family:"Bricolage Grotesque",sans-serif;font-size:4.2rem;font-weight:800;box-shadow:0 6px 0 var(--orange);margin:6px 0 16px;animation:pop .5s ease-out}
 @keyframes pop{0%{transform:scale(.3) rotate(-12deg);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1)}}
+.bigletter.none{background:#E9EDF3;color:#9AA3B5;box-shadow:0 6px 0 #C5CFDC}
+.letters span.miss{background:#E9EDF3;color:#9AA3B5;box-shadow:0 4px 0 #C5CFDC}
 .letters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:8px 0 16px}
 .letters span{width:52px;height:60px;border-radius:26px 26px 8px 8px;background:var(--marigold);color:#fff;display:grid;place-items:center;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.8rem;box-shadow:0 4px 0 var(--orange)}
 
@@ -220,7 +267,6 @@ footer{text-align:center;font-size:.8rem;color:var(--muted);padding:10px 16px 30
   <div class="bar">
     <span class="brand"><img src="icon-192.png" alt="@eduproberegova" width="36" height="36"><span>@eduproberegova</span></span>
     <div class="doors" id="doors"></div>
-    <span class="clock" id="clock">00:00</span>
   </div>
 </header>
 
@@ -467,7 +513,7 @@ function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} 
 function clearState(){ try{ localStorage.removeItem(KEY); }catch(e){} }
 (function(){
   var q=location.search||'';
-  if(/[?&]reset=1/.test(q)){ clearState(); try{ history.replaceState(null,'',location.pathname); }catch(e){} }
+  if(/[?&]reset=1/.test(q)){ clearState(); try{ indexedDB.deleteDatabase('mictlan-rec'); }catch(e){} try{ history.replaceState(null,'',location.pathname); }catch(e){} }
 })();
 
 /* ============================================================
@@ -498,7 +544,13 @@ var ILLMAP={'hero.jpg':'ofrenda','papel-picado.jpg':'papel','casa-azul.jpg':'cas
 function pic(src, emoji, cls){
   var d=el('div','pic'+(cls?' '+cls:''));
   var key=src?(ILLMAP[src]||src.replace(/\.(jpe?g|png|webp)$/,'')):null;
-  if(key && ILL[key]){ d.classList.add('svg'); d.innerHTML=ILL[key]; return d; }
+  if(src && key && ILL[key]){
+    // primero la foto (si existe en el repositorio); si no, la ilustración
+    var ph=new Image(); ph.alt=''; ph.decoding='async';
+    ph.onerror=function(){ if(ph.parentNode) ph.parentNode.removeChild(ph); d.classList.add('svg'); d.innerHTML=ILL[key]; };
+    ph.onload=function(){ d.classList.add('photo'); };
+    ph.src=src; d.appendChild(ph); return d;
+  }
   var fb=el('div','fb',emoji||'🌼');
   if(src){
     var im=new Image(); im.alt=''; im.loading='lazy'; im.decoding='async';
@@ -528,21 +580,18 @@ function pic(src, emoji, cls){
 /* ============================================================
    CABECERA: puertas y reloj
    ============================================================ */
-var doorsEl=document.getElementById('doors'), clockEl=document.getElementById('clock');
+var doorsEl=document.getElementById('doors');
 function drawDoors(){
   doorsEl.innerHTML='';
   for(var i=0;i<5;i++){
     var d=el('div','door-dot');
     if(S && S.letters && S.letters[i]){ d.classList.add('open'); d.textContent=S.letters[i]; }
+    else if(S && S.fail && S.fail[i] && (S.door>i || S.phase==='unlock' || S.phase==='final' || S.phase==='done')){ d.classList.add('nolet'); d.textContent='–'; }
     else d.textContent=i+1;
     if(S && !S.done && S.door===i && S.started) d.classList.add('now');
     doorsEl.appendChild(d);
   }
 }
-setInterval(function(){
-  if(S && S.t0){ clockEl.textContent=fmt((S.tEnd||Date.now())-S.t0); }
-  else clockEl.textContent='00:00';
-},500);
 
 /* ============================================================
    TECLADO DE TILDES
@@ -574,11 +623,18 @@ function insertChar(ch){
   inp.dispatchEvent(new Event('input',{bubbles:true}));
 }
 function showAccents(on){ accents.classList.toggle('hidden',!on); }
+function noPaste(n){
+  ['paste','drop'].forEach(function(ev){ n.addEventListener(ev,function(e){ e.preventDefault(); toast('✋ Escribe tú mismo/a, sin copiar y pegar.'); }); });
+}
+function toast(msg){
+  var t=document.getElementById('toast'); if(!t){ t=el('div','toast'); t.id='toast'; document.body.appendChild(t); }
+  t.textContent=msg; t.classList.add('on'); clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('on'); },2200);
+}
 function mkInput(cls, w){
   var i=el('input',cls); i.type='text'; i.className=(cls||'')+' ac';
   i.setAttribute('autocomplete','off'); i.setAttribute('autocorrect','off'); i.setAttribute('autocapitalize','off'); i.setAttribute('spellcheck','false');
   if(w) i.style.width=w;
-  track(i); return i;
+  track(i); if(cls!=='txt nopasteoff') noPaste(i); return i;
 }
 
 /* ============================================================
@@ -592,9 +648,9 @@ function startScreen(){
   var c=el('div','card');
   c.innerHTML='<div class="eyebrow">Escape room · Día de Muertos</div><h1>Viaje al Mictlán</h1>'+
     '<p>Cinco puertas, cinco letras y una palabra secreta. Abre cada puerta con tu español para que las almas encuentren el camino a casa.</p>'+
-    '<p class="small">Tiempo recomendado: 40 minutos · Puedes usar pistas, pero cada pista cuenta.</p>';
+    '<p class="small">Puedes usar pistas, pero cada pista cuenta. Al final, envías tus respuestas a tu profesora.</p>';
   var lab=el('label','f','Tu nombre'); c.appendChild(lab);
-  var name=mkInput('txt'); name.placeholder='Nombre y apellido'; name.value=(S&&S.name)||''; c.appendChild(name);
+  var name=mkInput('txt nopasteoff'); name.placeholder='Nombre y apellido'; name.value=(S&&S.name)||''; c.appendChild(name);
   c.appendChild(el('label','f','Elige tu nivel'));
   var lv=el('div','levels'), chosen=null;
   [['a1','A1','Primer contacto: hay, está, adjetivos, presente'],['b1','A2–B1','Indefinido e imperfecto, se + verbo, leyenda']].forEach(function(o){
@@ -702,6 +758,20 @@ function taskScreen(){
   if(P.hint){ hb=el('button','btn ghost','💡 Pista'); acts.appendChild(hb);
     hb.onclick=function(){ if(!hintBox.classList.contains('hidden')) return; hintBox.innerHTML='<b>Pista:</b> '+esc(P.hint); hintBox.classList.remove('hidden'); S.hints++; save(); hb.disabled=true; };
   }
+  var skip=el('button','btn ghost hidden', P.type==='cards'?'Seguir →':'Seguir sin la letra →');
+  acts.appendChild(skip);
+  S.tries=S.tries||0;
+  function finish(){ chk.textContent='Continuar →'; chk.dataset.next='1'; if(hb) hb.disabled=true; skip.classList.add('hidden'); showAccents(false); }
+  function giveUp(msg){
+    var n=api.reveal(); S.missed=(S.missed||0)+n;
+    S.fail=S.fail||[]; S.fail[S.door]=true; save();
+    fbl.className='fb-line warn'; fbl.innerHTML=esc(msg)+(P.type==='order'?' Este es el orden correcto.':' Las respuestas correctas están en verde.')+' <b>Esta puerta se abre, pero sin letra.</b>';
+    finish();
+  }
+  skip.onclick=function(){
+    if(P.type==='cards'){ nextPart(); return; }
+    giveUp('Has decidido seguir.');
+  };
   var busy=false;
   chk.onclick=function(){
     if(busy) return; busy=true; setTimeout(function(){busy=false;},600);
@@ -710,13 +780,15 @@ function taskScreen(){
     if(r.done){
       fbl.className='fb-line ok'; fbl.textContent=P.type==='cards'?'':'¡Perfecto! Todo correcto.';
       if(P.type==='cards'){ nextPart(); return; }
-      chk.textContent='Continuar →'; chk.dataset.next='1'; if(hb) hb.disabled=true;
-      showAccents(false);
-    } else {
-      if(P.type!=='cards') S.errors++; save();
-      fbl.className='fb-line '+(r.warnOnly?'warn':'bad');
-      fbl.textContent=r.msg;
+      finish(); return;
     }
+    if(P.type==='cards'){ fbl.className='fb-line warn'; fbl.textContent=r.msg; skip.classList.remove('hidden'); return; }
+    if(r.missing){ fbl.className='fb-line warn'; fbl.textContent=r.msg+' Si no sabes, puedes seguir sin la letra.'; skip.classList.remove('hidden'); return; }
+    S.errors++; S.tries++; save();
+    if(S.tries>=2){ giveUp(r.msg); return; }
+    fbl.className='fb-line '+(r.warnOnly?'warn':'bad');
+    fbl.innerHTML=esc(r.msg)+' <b>Tienes una oportunidad más:</b> corrige y comprueba otra vez. La letra solo se gana con todas las respuestas correctas.';
+    skip.classList.remove('hidden');
   };
   // Enter = comprobar
   box.addEventListener('keydown',function(e){ if(e.key==='Enter' && e.target.tagName==='INPUT'){ e.preventDefault(); chk.click(); } });
@@ -726,22 +798,34 @@ function taskScreen(){
 
 function nextPart(){
   var D=LEVELS[S.lv].doors[S.door];
+  S.tries=0;
   if(S.part+1<D.parts.length){ S.part++; save(); route(); }
-  else { S.letters[S.door]=LETTERS[S.door]; S.phase='unlock'; save(); route(); }
+  else { var f=S.fail&&S.fail[S.door]; S.letters[S.door]=f?'':LETTERS[S.door]; S.phase='unlock'; save(); route(); }
 }
 
 function unlockScreen(){
   showAccents(false); app.innerHTML='';
   var c=el('div','card unlock');
   c.appendChild(el('div','eyebrow','Puerta '+(S.door+1)+' abierta'));
-  c.appendChild(el('h2',null,'¡La puerta se abre!'));
-  c.appendChild(el('p',null,'Detrás de la puerta encuentras una letra:'));
-  c.appendChild(el('div','bigletter',LETTERS[S.door]));
-  var lt=el('div','letters'); S.letters.forEach(function(x){ if(x) lt.appendChild(el('span',null,x)); }); c.appendChild(lt);
+  var got=!!S.letters[S.door];
+  c.appendChild(el('h2',null,got?'¡La puerta se abre!':'La puerta se abre…'));
+  c.appendChild(el('p',null,got?'Detrás de la puerta encuentras una letra:':'…pero esta vez no hay letra. La letra solo se gana con todas las respuestas correctas. ¡Ánimo con la siguiente puerta!'));
+  c.appendChild(el('div','bigletter'+(got?'':' none'),got?LETTERS[S.door]:'?'));
+  c.appendChild(lettersRow());
   var a=el('div','actions'); a.style.justifyContent='center';
   var b=el('button','btn',S.door<4?'Siguiente puerta →':'Formar la palabra secreta →'); a.appendChild(b); c.appendChild(a);
   b.onclick=function(){ if(S.door<4){ S.door++; S.part=0; S.phase='story'; } else { S.phase='final'; } save(); route(); };
   app.appendChild(c); drawDoors(); scrollTop();
+}
+
+function lettersRow(all){
+  var lt=el('div','letters');
+  for(var i=0;i<5;i++){
+    var x=S.letters[i];
+    if(x) lt.appendChild(el('span',null,x));
+    else if(all || (S.fail&&S.fail[i]&&i<=S.door)) lt.appendChild(el('span','miss','?'));
+  }
+  return lt;
 }
 
 function finalScreen(){
@@ -749,53 +833,217 @@ function finalScreen(){
   var c=el('div','card unlock');
   c.appendChild(el('div','eyebrow','La palabra secreta'));
   c.appendChild(el('h2',null,'Ordena las letras'));
-  var lt=el('div','letters'); LETTERS.forEach(function(x){ lt.appendChild(el('span',null,x)); }); c.appendChild(lt);
-  c.appendChild(xoloBlock('Pista de Xolo: ¿quién visita a las familias en el Día de Muertos?'));
+  c.appendChild(lettersRow(true));
+  var have=S.letters.filter(function(x){return x;}).length;
+  c.appendChild(xoloBlock((have<5?'Te faltan '+(5-have)+' letra'+(5-have>1?'s':'')+', ¡pero puedes adivinar la palabra! ':'')+'Pista de Xolo: ¿quién visita a las familias en el Día de Muertos?'));
   var inp=mkInput('txt'); inp.placeholder='La palabra secreta'; inp.style.marginTop='16px'; inp.style.textAlign='center'; c.appendChild(inp);
   var fbl=el('div','fb-line'); c.appendChild(fbl);
   var a=el('div','actions'); a.style.justifyContent='center'; var b=el('button','btn gold','Iluminar el camino ✨'); a.appendChild(b); c.appendChild(a);
+  var show=el('button','btn ghost hidden','Ver la palabra'); a.appendChild(show);
+  show.onclick=function(){ inp.value='ALMAS'; inp.disabled=true; S.missed=(S.missed||0)+1; save(); show.classList.add('hidden'); fbl.className='fb-line warn'; fbl.textContent='La palabra secreta es ALMAS. ¡Ilumina el camino!'; };
   function go(){
     var r=judge(inp.value,['almas','las almas'],false);
     if(r==='ok'){ S.done=true; S.tEnd=Date.now(); S.phase='done'; save(); route(); }
-    else { S.errors++; save(); fbl.className='fb-line bad'; fbl.textContent='Mmm… no es esa. Usa las cinco letras.'; }
+    else { S.errors++; save(); fbl.className='fb-line bad'; fbl.textContent='Mmm… no es esa. Usa las cinco letras.'; show.classList.remove('hidden'); }
   }
   b.onclick=go; inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); go(); } });
   app.appendChild(c); showAccents(false); drawDoors(); scrollTop();
 }
 
+var FORMSPREE='https://formspree.io/f/xaqarvll';
+var A1_CARD=['Esta ofrenda es para','Es / Era','Le gusta / Le gustaba','En la ofrenda hay'];
+
+function mkArea(rows){
+  var t=el('textarea','txt area ac'); t.rows=rows||3;
+  t.setAttribute('autocomplete','off'); t.setAttribute('autocorrect','off'); t.setAttribute('autocapitalize','sentences'); t.setAttribute('spellcheck','false');
+  track(t); noPaste(t); return t;
+}
+
+/* ---------- grabaciones (se guardan en el dispositivo hasta enviar) ---------- */
+var REC_MAX=90;
+function idb(){ return new Promise(function(res,rej){ try{ var r=indexedDB.open('mictlan-rec',1); r.onupgradeneeded=function(){ r.result.createObjectStore('b'); }; r.onsuccess=function(){ res(r.result); }; r.onerror=function(){ rej(r.error); }; }catch(e){ rej(e); } }); }
+function putBlob(k,b){ return idb().then(function(db){ return new Promise(function(res){ var t=db.transaction('b','readwrite'); t.objectStore('b').put(b,k); t.oncomplete=res; t.onerror=res; }); }).catch(function(){}); }
+function getBlob(k){ return idb().then(function(db){ return new Promise(function(res){ var q=db.transaction('b').objectStore('b').get(k); q.onsuccess=function(){ res(q.result||null); }; q.onerror=function(){ res(null); }; }); }).catch(function(){ return null; }); }
+function clearBlobs(){ return idb().then(function(db){ return new Promise(function(res){ var t=db.transaction('b','readwrite'); t.objectStore('b').clear(); t.oncomplete=res; t.onerror=res; }); }).catch(function(){}); }
+function extOf(t){ return /mp4|aac|m4a/.test(t)?'m4a':/ogg/.test(t)?'ogg':'webm'; }
+var curRec=null;
+
+function recorder(key, onChange){
+  var box=el('div','rec');
+  var row=el('div','recrow');
+  var btn=el('button','recbtn','<span class="dot"></span><span class="lbl">Grabar</span>'); btn.type='button';
+  var info=el('span','recinfo','Pulsa para grabar tu respuesta (máx. '+REC_MAX+' s).');
+  var meter=el('div','meter','<i></i>');
+  row.appendChild(btn); row.appendChild(info); box.appendChild(row); box.appendChild(meter);
+  var out=el('div','recout'); box.appendChild(out);
+  var blob=null, mr=null, stream=null, chunks=[], t0=0, tick=null, ac=null, anI=null;
+  function show(b){
+    blob=b; out.innerHTML='';
+    if(!b){ return; }
+    var a=document.createElement('audio'); a.controls=true; a.src=URL.createObjectURL(b); out.appendChild(a);
+    out.appendChild(el('div','small','Escucha tu grabación. Si no te gusta, graba otra vez.'));
+    btn.querySelector('.lbl').textContent='Grabar de nuevo'; info.textContent='✓ Grabación guardada';
+    box.classList.add('done'); onChange&&onChange();
+  }
+  getBlob(key).then(function(b){ if(b) show(b); });
+  function stop(){ if(mr && mr.state==='recording') mr.stop(); }
+  btn.onclick=function(){
+    if(box.classList.contains('locked')) return;
+    if(mr && mr.state==='recording'){ stop(); return; }
+    if(curRec && curRec!==stop) curRec();
+    if(!navigator.mediaDevices || !window.MediaRecorder){ info.className='recinfo bad'; info.textContent='Este navegador no permite grabar. Usa Chrome o Safari actualizado.'; return; }
+    navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}}).then(function(st){
+      stream=st;
+      var mime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].filter(function(t){ return MediaRecorder.isTypeSupported(t); })[0]||'';
+      mr=new MediaRecorder(st, mime?{mimeType:mime,audioBitsPerSecond:48000}:{});
+      chunks=[]; mr.ondataavailable=function(e){ if(e.data && e.data.size) chunks.push(e.data); };
+      mr.onstop=function(){
+        clearInterval(tick); clearInterval(anI); try{ ac&&ac.close(); }catch(e){} meter.firstChild.style.width='0';
+        stream.getTracks().forEach(function(t){ t.stop(); });
+        box.classList.remove('on'); curRec=null;
+        var b=new Blob(chunks,{type:mr.mimeType||'audio/webm'});
+        if(Date.now()-t0<1500 || b.size<1000){ info.className='recinfo bad'; info.textContent='La grabación es demasiado corta. Graba otra vez.'; btn.querySelector('.lbl').textContent=blob?'Grabar de nuevo':'Grabar'; return; }
+        putBlob(key,b); info.className='recinfo'; show(b);
+      };
+      mr.start(1000); t0=Date.now(); curRec=stop; box.classList.add('on'); out.innerHTML='';
+      btn.querySelector('.lbl').textContent='Parar'; info.className='recinfo'; info.textContent='Grabando… 0:00';
+      tick=setInterval(function(){ var sec=Math.floor((Date.now()-t0)/1000); info.textContent='Grabando… '+Math.floor(sec/60)+':'+('0'+sec%60).slice(-2)+' / '+Math.floor(REC_MAX/60)+':'+('0'+REC_MAX%60).slice(-2); if(sec>=REC_MAX) stop(); },250);
+      try{ ac=new (window.AudioContext||window.webkitAudioContext)(); var an=ac.createAnalyser(); ac.createMediaStreamSource(st).connect(an); var buf=new Uint8Array(an.fftSize);
+        anI=setInterval(function(){ an.getByteTimeDomainData(buf); var m=0; for(var i=0;i<buf.length;i++) m=Math.max(m,Math.abs(buf[i]-128)); meter.firstChild.style.width=Math.min(100,m/64*100)+'%'; },100); }catch(e){}
+    }).catch(function(){ info.className='recinfo bad'; info.textContent='No hay acceso al micrófono. Permite el micrófono en el navegador y pulsa otra vez.'; });
+  };
+  return {node:box, get:function(){ return blob; }, lock:function(){ box.classList.add('locked'); btn.disabled=true; }};
+}
+
 function doneScreen(){
   showAccents(false); app.innerHTML='';
   var L=LEVELS[S.lv];
+  S.ans=S.ans||{};
   var c=el('div','card');
   var cert=el('div','cert');
   cert.innerHTML='<img class="certlogo" src="icon-192.png" alt="@eduproberegova" width="72" height="72"><div class="eyebrow">Viaje al Mictlán · Nivel '+L.label+'</div>'+
     '<h2>¡Las almas ya ven el camino!</h2><p>Gracias a</p><div class="who">'+esc(S.name)+'</div>'+
     '<p>las almas han llegado a casa. La palabra secreta era <b>ALMAS</b>.</p>';
   var st=el('div','stats');
-  st.innerHTML='<div class="stat">Tiempo<b>'+fmt(S.tEnd-S.t0)+'</b></div><div class="stat">Pistas<b>'+S.hints+'</b></div><div class="stat">Intentos fallidos<b>'+S.errors+'</b></div>';
+  var have=S.letters.filter(function(x){return x;}).length;
+  st.innerHTML='<div class="stat">Letras<b>'+have+'/5</b></div><div class="stat">Pistas<b>'+S.hints+'</b></div><div class="stat">Respuestas vistas<b>'+(S.missed||0)+'</b></div>';
+  if(have===5) cert.querySelector('h2').insertAdjacentHTML('afterend','<p><b>🏆 ¡Viaje perfecto: cinco letras de cinco!</b></p>');
   cert.appendChild(st);
-  cert.appendChild(el('p','small','📸 Haz una captura de pantalla y enséñasela a tu profesora.'));
+  cert.appendChild(el('p','small','Último paso: graba tus respuestas, escribe tu texto y envíalo todo a tu profesora.'));
   c.appendChild(cert);
   app.appendChild(c);
 
+  var fields=[];
+  function bind(key,node){ node.value=S.ans[key]||''; node.addEventListener('input',function(){ S.ans[key]=node.value; save(); }); node.addEventListener('focus',function(){ if(!S.sent) showAccents(true); }); return node; }
+
+  // 1. Hablar: grabación de voz
   var sp=el('div','card');
-  sp.appendChild(el('div','eyebrow','Para hablar en clase'));
+  sp.appendChild(el('div','eyebrow','1 · Habla'));
   sp.appendChild(el('h2',null,'¡Ahora habla!'));
-  var g=el('div','speak');
-  L.speak.forEach(function(x){ g.appendChild(el('div','sq','<b>'+esc(x.q)+'</b><span>'+esc(x.s)+'</span>')); });
+  sp.appendChild(el('p',null,'Graba tu respuesta a cada pregunta. Habla en español unos 30–60 segundos. Las frases de ayuda te pueden servir.'));
+  var g=el('div','speak'), recs=[];
+  L.speak.forEach(function(x,i){
+    var q=el('div','sq','<b>'+(i+1)+'. '+esc(x.q)+'</b><span>'+esc(x.s)+'</span>');
+    var r=recorder(S.lv+'-p'+(i+1)); q.appendChild(r.node); recs.push({q:x.q,r:r,n:i+1});
+    g.appendChild(q);
+  });
   sp.appendChild(g); app.appendChild(sp);
 
+  // 2. Escribir
   if(L.calaverita){
     var cv=el('div','card');
-    cv.innerHTML='<div class="eyebrow">Reto extra</div><h2>Escribe una calaverita</h2>'+
-      '<p>Las <b>calaveritas literarias</b> son versos cortos y divertidos, con rima, en los que la Muerte visita a alguien. Se escriben con humor y con cariño. Aquí tienes un ejemplo:</p>'+
+    cv.innerHTML='<div class="eyebrow">2 · Escribe</div><h2>Tu calaverita</h2>'+
+      '<p>Las <b>calaveritas literarias</b> son versos cortos y divertidos en los que la Muerte visita a alguien. Se escriben con humor y con cariño. Aquí tienes un ejemplo:</p>'+
       '<div class="poem">La Catrina vino a clase<br>buscando a quién llevar,<br>pero vio los irregulares<br>¡y se fue sin respirar!</div>'+
-      '<p>Escribe tu calaverita (cuatro versos) para un personaje de un libro o de una película… o para tu profe.</p>';
-    app.appendChild(cv);
+      '<p>Escribe tu calaverita (cuatro versos) para un personaje de un libro o de una película… o para tu profe.</p>'+
+      '<p class="remark">💡 <b>No hace falta que rime:</b> puedes escribir tu calaverita sin rima. Lo importante es la idea y el español.</p>';
+    var vs=el('div','verses');
+    for(var k=1;k<=4;k++){
+      var row=el('label','verse','<span>Verso '+k+'</span>');
+      var vi=bind('v'+k,mkInput('txt')); vi.placeholder=k===1?'Por ejemplo: La Muerte llegó a…':''; row.appendChild(vi); vs.appendChild(row);
+      fields.push({key:'v'+k,label:'Verso '+k,el:vi,verse:true});
+    }
+    cv.appendChild(vs); app.appendChild(cv);
+  } else {
+    var tc=el('div','card');
+    tc.innerHTML='<div class="eyebrow">2 · Escribe</div><h2>La tarjeta de mi ofrenda</h2><p>Piensa en una persona famosa o en un personaje. Completa la tarjeta para su ofrenda.</p>';
+    var cd=el('div','ocard');
+    A1_CARD.forEach(function(lbl,k){
+      var row=el('label','verse','<span>'+esc(lbl)+'…</span>');
+      var vi=bind('t'+(k+1),mkInput('txt')); row.appendChild(vi); cd.appendChild(row);
+      fields.push({key:'t'+(k+1),label:lbl,el:vi,min:2});
+    });
+    tc.appendChild(cd); app.appendChild(tc);
   }
+
+  // 3. Enviar
+  var sc=el('div','card send');
+  sc.appendChild(el('div','eyebrow','3 · Envía'));
+  var fbl=el('div','fb-line');
+  var acts=el('div','actions'); acts.style.justifyContent='center';
+  var send=el('button','btn gold','📨 Enviar a mi profesora'); acts.appendChild(send);
+  sc.appendChild(acts); sc.appendChild(fbl);
+  var dl=el('div','dl'); sc.appendChild(dl);
+  app.appendChild(sc);
+
+  function lock(msg){
+    fields.forEach(function(f){ f.el.disabled=true; }); recs.forEach(function(r){ r.r.lock(); });
+    send.disabled=true; send.textContent='✓ Enviado';
+    fbl.className='fb-line ok'; fbl.textContent=msg||'¡Enviado! Tu profesora ya tiene tus grabaciones y tu texto. ¡Gracias!';
+    showAccents(false);
+  }
+  function offerDownloads(){
+    dl.innerHTML='<p class="small">Descarga tus grabaciones y envíaselas a tu profesora:</p>';
+    recs.forEach(function(x){ var b=x.r.get(); if(!b) return;
+      var a=document.createElement('a'); a.className='btn ghost'; a.download=(S.name||'alumno').replace(/\s+/g,'_')+'_Mictlan_P'+x.n+'.'+extOf(b.type); a.href=URL.createObjectURL(b); a.textContent='⬇ Grabación '+x.n; dl.appendChild(a); });
+  }
+  if(S.sent){ lock(S.sentMsg); if(S.sentNoAudio) setTimeout(offerDownloads,400); }
+
+  function build(withFiles){
+    var fd=new FormData();
+    var doors=[]; for(var i=0;i<5;i++){ doors.push('Puerta '+(i+1)+': '+(S.letters[i]?'letra '+S.letters[i]:'sin letra')); }
+    fd.append('_subject','Viaje al Mictlán · '+L.label+' · '+S.name);
+    fd.append('Nombre',S.name); fd.append('Nivel',L.label);
+    fd.append('Letras',have+'/5'); fd.append('Puertas',doors.join(' · '));
+    fd.append('Pistas usadas',String(S.hints)); fd.append('Respuestas vistas (no encontradas)',String(S.missed||0));
+    recs.forEach(function(x){ fd.append('Pregunta '+x.n, x.q); });
+    if(L.calaverita) fd.append('Calaverita', fields.map(function(f){return f.el.value.trim();}).filter(Boolean).join('\n'));
+    else fields.forEach(function(f){ fd.append(f.label, f.el.value.trim()); });
+    if(withFiles) recs.forEach(function(x){ var b=x.r.get(); fd.append('Grabación '+x.n, b, (S.name||'alumno').replace(/\s+/g,'_')+'_P'+x.n+'.'+extOf(b.type)); });
+    else fd.append('Grabaciones','No adjuntadas: el alumno las descargará y te las enviará.');
+    return fd;
+  }
+  function post(fd){ return fetch(FORMSPREE,{method:'POST',headers:{'Accept':'application/json'},body:fd}).then(function(r){ if(!r.ok) throw new Error(String(r.status)); return r; }); }
+
+  send.onclick=function(){
+    if(S.sent) return;
+    if(curRec) curRec();
+    var noRec=recs.filter(function(x){ return !x.r.get(); });
+    var missing=fields.filter(function(f){ return !f.verse && norm(f.el.value).length<(f.min||2); });
+    var verses=fields.filter(function(f){ return f.verse && norm(f.el.value); }).length;
+    fields.forEach(function(f){ f.el.classList.toggle('need', missing.indexOf(f)>-1); });
+    recs.forEach(function(x){ x.r.node.classList.toggle('need', noRec.indexOf(x)>-1); });
+    if(noRec.length){ fbl.className='fb-line bad'; fbl.textContent='Graba tu respuesta a '+(noRec.length===1?'la pregunta '+noRec[0].n:'las preguntas '+noRec.map(function(x){return x.n;}).join(', '))+'.'; return; }
+    if(missing.length){ fbl.className='fb-line bad'; fbl.textContent='Completa la tarjeta antes de enviar.'; missing[0].el.focus(); return; }
+    if(L.calaverita && verses<2){ fbl.className='fb-line bad'; fbl.textContent='Escribe al menos dos versos de tu calaverita.'; return; }
+    send.disabled=true; send.textContent='Enviando…'; fbl.className='fb-line'; fbl.textContent='Enviando… no cierres la página.';
+    post(build(true)).then(function(){
+      S.sent=true; S.sentNoAudio=false; S.sentMsg=null; save(); lock();
+    }).catch(function(){
+      // si el formulario no admite archivos, se envía el texto y el alumno descarga las grabaciones
+      post(build(false)).then(function(){
+        S.sent=true; S.sentNoAudio=true; S.sentMsg='Tu texto se ha enviado. Las grabaciones no se pudieron adjuntar: descárgalas abajo y envíaselas a tu profesora.';
+        save(); lock(S.sentMsg); fbl.className='fb-line warn'; offerDownloads();
+      }).catch(function(){
+        send.disabled=false; send.textContent='📨 Enviar a mi profesora';
+        fbl.className='fb-line bad'; fbl.textContent='No se pudo enviar. Revisa tu conexión a internet e inténtalo otra vez.';
+      });
+    });
+  };
+
   var a=el('div','actions'); a.style.justifyContent='center';
   var again=el('button','btn ghost','Jugar otra vez'); a.appendChild(again); app.appendChild(a);
-  again.onclick=function(){ if(confirm('¿Empezar de nuevo?')){ clearState(); S=null; drawDoors(); startScreen(); } };
+  again.onclick=function(){ if(confirm('¿Empezar de nuevo? Tus respuestas y grabaciones se borrarán de este dispositivo.')){ clearBlobs(); clearState(); S=null; drawDoors(); startScreen(); } };
   drawDoors(); scrollTop();
 }
 
@@ -824,9 +1072,17 @@ function renderChoice(box,P){
       if(s.sel===it.a){ s.ok=true; s.row.classList.remove('bad'); s.row.classList.add('ok'); }
       else { wrong++; s.row.classList.add('bad'); }
     });
-    if(missing) return {done:false,msg:'Te faltan '+missing+' respuesta'+(missing>1?'s':'')+'.'};
-    if(wrong) return {done:false,msg:'Hay '+wrong+' respuesta'+(wrong>1?'s':'')+' incorrecta'+(wrong>1?'s':'')+'. ¡Inténtalo otra vez!'};
+    if(missing) return {done:false,missing:true,msg:'Te faltan '+missing+' respuesta'+(missing>1?'s':'')+'.'};
+    if(wrong) return {done:false,msg:'Hay '+wrong+' respuesta'+(wrong>1?'s':'')+' incorrecta'+(wrong>1?'s':'')+'.'};
     return {done:true};
+  }, reveal:function(){
+    var n=0;
+    P.items.forEach(function(it,i){
+      var s=state[i]; if(s.ok) return;
+      n++; s.row.classList.remove('bad'); s.row.classList.add('shown');
+      var bs=s.row.querySelectorAll('.opt'); if(bs[it.a]) bs[it.a].classList.add('right');
+    });
+    return n;
   }};
 }
 
@@ -845,7 +1101,7 @@ function renderCards(box,P){
   return {check:function(){
     if(seen<total) return {done:false,warnOnly:true,msg:'Dale la vuelta a todas las tarjetas ('+seen+'/'+total+').'};
     return {done:true};
-  }};
+  }, reveal:function(){ return 0; }};
 }
 
 function renderType(box,P){
@@ -875,9 +1131,17 @@ function renderType(box,P){
       else if(j==='warn'){ warn++; r.c.classList.add('warn'); r.note.className='note warn'; r.note.textContent='¡Casi! Revisa la tilde o la ñ.'; }
       else { bad++; r.c.classList.add('bad'); r.note.className='note bad'; r.note.textContent='No es correcto.'; }
     });
-    if(empty) return {done:false,msg:'Te faltan '+empty+' palabra'+(empty>1?'s':'')+'.'};
+    if(empty) return {done:false,missing:true,msg:'Te faltan '+empty+' palabra'+(empty>1?'s':'')+'.'};
     if(bad||warn) return {done:false,warnOnly:!bad,msg:bad?('Hay '+(bad+warn)+' palabra'+((bad+warn)>1?'s':'')+' por corregir.'):'¡Casi! Solo faltan tildes.'};
     return {done:true};
+  }, reveal:function(){
+    var n=0;
+    rows.forEach(function(r){
+      if(r.ok) return;
+      n++; r.inp.disabled=true; r.c.classList.remove('bad','warn'); r.c.classList.add('shown');
+      r.note.className='note sol'; r.note.textContent='✓ '+r.it.art+' '+r.it.main;
+    });
+    return n;
   }};
 }
 
@@ -921,12 +1185,20 @@ function renderGaps(box,P,external){
       else if(j==='warn'){ warn++; r.span.classList.add('warn'); }
       else { bad++; r.span.classList.add('bad'); }
     });
-    if(empty) return {done:false,msg:'Te faltan '+empty+' hueco'+(empty>1?'s':'')+'.'};
+    if(empty) return {done:false,missing:true,msg:'Te faltan '+empty+' hueco'+(empty>1?'s':'')+'.'};
     if(bad||warn){
       var m=[]; if(bad) m.push(bad+' incorrecto'+(bad>1?'s':'')+' (en rojo)'); if(warn) m.push(warn+' con la tilde mal (en amarillo)');
       return {done:false,warnOnly:!bad,msg:'Revisa: '+m.join(' y ')+'.'};
     }
     return {done:true};
+  }, reveal:function(){
+    var n=0;
+    list.forEach(function(r){
+      if(r.ok) return;
+      n++; r.inp.disabled=true; r.span.classList.remove('bad','warn'); r.span.classList.add('shown');
+      var sol=el('span','sol','✓ '+esc(r.G.a[0])); r.span.insertBefore(sol, r.inp.nextSibling);
+    });
+    return n;
   }};
 }
 
@@ -948,7 +1220,7 @@ function renderOrder(box,P){
   var sh=shuffle(correct); if(sh.join('|')===correct.join('|')) sh.reverse();
   sh.forEach(function(t){ pool.appendChild(mk(t)); }); renum();
   return {check:function(){
-    if(pool.children.length) return {done:false,msg:'Coloca todas las frases primero.'};
+    if(pool.children.length) return {done:false,missing:true,msg:'Coloca todas las frases primero.'};
     var kids=[].slice.call(seq.children), wrong=[];
     kids.forEach(function(k,i){ if(k.dataset.t===correct[i]) k.classList.add('ok'); else wrong.push(k); });
     if(!wrong.length) return {done:true};
@@ -966,7 +1238,17 @@ function renderOrder(box,P){
       renum();
     },450);
     var good=0; while(good<kids.length && kids[good].dataset.t===correct[good]) good++;
-    return {done:false,msg: good===0 ? 'La primera frase no es correcta. ¡Inténtalo otra vez!' : (good===1 ? 'La primera frase está bien. Ordena las demás.' : 'Las primeras '+good+' frases están bien. Ordena las demás.')};
+    return {done:false,msg: good===0 ? 'La primera frase no es correcta.' : (good===1 ? 'La primera frase está bien. Ordena las demás.' : 'Las primeras '+good+' frases están bien. Ordena las demás.')};
+  }, reveal:function(){
+    var all=[].slice.call(seq.children).concat([].slice.call(pool.children));
+    var kept=0; while(kept<seq.children.length && seq.children[kept].dataset.t===correct[kept] && seq.children[kept].classList.contains('ok')) kept++;
+    seq.innerHTML=''; pool.innerHTML='';
+    correct.forEach(function(t,i){
+      var c=all.filter(function(x){return x.dataset.t===t;})[0];
+      c.classList.remove('flash'); c.classList.add(i<kept?'ok':'shown'); seq.appendChild(c);
+    });
+    renum();
+    return correct.length-kept;
   }};
 }
 
